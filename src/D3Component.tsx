@@ -4,6 +4,11 @@ import * as d3 from "d3";
 import * as webCola from 'webcola'
 import { Group } from 'webcola'
 import './style.css'
+export interface Icons {
+  labelColorMapping: any;
+  icons: any;
+  images: any;
+}
 export interface GraphObject {
   nodes: Node[];
   links: Link[];
@@ -30,7 +35,12 @@ var colors = function (s: string) {
 var category20 = colors("1f77b4aec7e8ff7f0effbb782ca02c98df8ad62728ff98969467bdc5b0d58c564bc49c94e377c2f7b6d27f7f7fc7c7c7bcbd22dbdb8d17becf9edae5");
 
 
-const D3Component = ({ graph }: { graph: GraphObject }) => {
+interface D3ComponentProps {
+  icons: Icons
+  graph: GraphObject
+}
+
+const D3Component = ({ graph }: D3ComponentProps) => {
   let nodeRef: HTMLDivElement | null = null
   useEffect(() => {
     var width = 960,

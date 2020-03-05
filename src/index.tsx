@@ -1,16 +1,17 @@
 import { Component } from 'react'
 import * as React from 'react'
-import Graph, { GraphObject } from './D3Component'
+import Graph, { GraphObject, Icons } from './D3Component'
 
 export interface Props {
   graph: GraphObject
+  icons: Icons
 }
 export default class extends Component<Props> {
 
   render() {
-    const { graph } = this.props
+    const { graph, icons } = this.props
     return (
-      <Graph graph={graph} />
+      <Graph graph={graph} icons={icons} />
     )
   }
 }
