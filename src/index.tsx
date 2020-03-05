@@ -1,12 +1,16 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import * as React from 'react'
+import Graph, { GraphObject } from './D3Component'
 
-export default class extends Component {
+export interface Props {
+  graph: GraphObject
+}
+export default class extends Component<Props> {
+
   render() {
+    const { graph } = this.props
     return (
-      <div>
-        <h2>Welcome to React TS!</h2>
-      </div>
+      <Graph graph={graph} />
     )
   }
 }
