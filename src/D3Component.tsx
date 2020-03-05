@@ -13,12 +13,12 @@ export interface GraphObject {
   nodes: Node[];
   links: Link[];
 }
-interface Link {
+export interface Link {
   source: number;
   target: number;
   value: number;
 }
-interface Node {
+export interface Node {
   width?: number;
   height?: number;
   name: string;

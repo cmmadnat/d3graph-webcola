@@ -20,7 +20,9 @@
   },
   "dependencies": {
     "@types/d3": "^5.7.2",
+    "@types/lodash": "^4.14.149",
     "d3": "^5.15.0",
+    "lodash": "^4.17.15",
     "webcola": "^3.4.0"
   },
   "peerDependencies": {
