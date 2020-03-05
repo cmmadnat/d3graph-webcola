@@ -11,12 +11,16 @@ module.exports = {
   },
   webpack: {
     extra: {
-      entry: './src/index',
+
+      entry: {
+        demo: ['./demo/src/index.tsx'],
+      },
+      // entry: './src/index',
       resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
       },
       module: {
-        rules: [{test: /\.tsx$/, loader: 'ts-loader'}],
+        rules: [{ test: /\.tsx$/, loader: 'ts-loader' }],
       },
     },
   },
