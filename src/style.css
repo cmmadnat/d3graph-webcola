@@ -25,3 +25,10 @@
     text-anchor: middle;
     cursor: move;
 }
+.icon-label{
+      fill: white;
+    font-family: fontello;
+    font-size: 25px;
+    text-anchor: middle;
+    cursor: move;
+}

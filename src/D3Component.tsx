@@ -98,13 +98,20 @@ const D3Component = ({ graph }: D3ComponentProps) => {
       .data(graph.nodes)
       .enter().append("circle")
       .attr("class", "node")
-      .attr("r", 5)
+      .attr("r", 20)
       // @ts-ignore
       .style("fill", function (d: any) { return color(d.group); })
-      .call(cola.drag);
-
+      .call(cola.drag)
     node.append("title")
-      .text(function (d: any) { return d.name; });
+      .text(function (d: any) { return d.name; })
+      .call(cola.drag)
+
+    var label = svg.selectAll('.icon-label')
+      .data(graph.nodes)
+      .enter().append('text')
+      .attr('class', 'icon icon-label')
+      .html(d => '&#xe805;')
+      .call(cola.drag)
 
     cola.on('tick', function () {
       link.attr("x1", function (d: any) { return d.source.x; })
@@ -120,6 +127,11 @@ const D3Component = ({ graph }: D3ComponentProps) => {
         .attr('y', function (d: Group) { return d.bounds ? d.bounds.y : 10 })
         .attr('width', function (d: Group) { return d.bounds ? d.bounds.width() : 10 })
         .attr('height', function (d: Group) { return d.bounds ? d.bounds.height() : 10 });
+      label.attr('x', ((d: any) => d.x))
+        .attr("y", function (d: any) {
+          var h = this.getBBox().height;
+          return d.y + h / 4;
+        });
     });
   });
   return (
