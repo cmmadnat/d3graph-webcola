@@ -57,8 +57,17 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
 
     var svg = d3.select(nodeRef).append("svg")
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", height)
+      .call(d3.zoom().on("zoom", redraw));
+    function redraw() {
+      //@ts-ignore
 
+      // console.log(d3.event.transform)
+      const transform = d3.event.transform
+      svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+      // svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+
+    }
     var groupMap: any = {};
     graph.nodes.forEach(function (v, i) {
       var g = v.group;
