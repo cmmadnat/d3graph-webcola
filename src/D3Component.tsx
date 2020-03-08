@@ -119,11 +119,11 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         return `&#x${icon};`;
       })
       .call(cola.drag)
-
     var label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
       .enter()
-      .append('rect')
+      .append('g')
+    label.append('rect')
       .attr('rx', 15)
       .attr('class', 'graph-cola-label')
       .attr('height', 30)
@@ -134,15 +134,17 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         return icons.labelColorMapping[d.icon]
       })
       .call(cola.drag)
-
-    var labelText = svg.selectAll('.graph-cola-label-text')
-      .data(graph.nodes)
-      .enter()
+    label
       .append('text')
-      .attr('class', 'graph-cola-label-text')
+      .attr('x', (d: Node) => {
+        return 180 / 2
+      })
+      .attr('text-anchor', 'middle')
+      .attr('y', 20)
       .text((d: Node) => {
         return d.name.length > 20 ? d.name.substr(0, 20) + '...' : d.name;
       })
+      .attr('class', 'graph-cola-label-text')
       .call(cola.drag)
 
 
@@ -156,22 +158,29 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         .attr("cy", function (d: any) { return d.y; });
 
       label
-        .attr("x", function (d: any) {
-          var h = this.getBBox().width
-          return d.x - h / 2;
+        .attr('transform', (d: any, index, selection) => {
+          // @ts-ignore
+          const w = selection[index].getBBox().width
+          const x = d.x - w / 2
+          const y = d.y + OFFSET
+          return `translate(${x},${y})`
         })
-        .attr("y", function (d: any) {
-          return d.y + OFFSET
-        })
-      labelText
-        .attr("x", function (d: any) {
-          var h = this.getBBox().width
-          return d.x - h / 2;
-        })
-        .attr("y", function (d: any) {
-          var h = this.getBBox().height
-          return d.y + OFFSET + h;
-        })
+      // .attr("x", function (d: any) {
+      //   var h = this.getBBox().width
+      //   return d.x - h / 2;
+      // })
+      // .attr("y", function (d: any) {
+      //   return d.y + OFFSET
+      // })
+      // labelText
+      //   .attr("x", function (d: any) {
+      //     var h = this.getBBox().width
+      //     return d.x - h / 2;
+      //   })
+      //   .attr("y", function (d: any) {
+      //     var h = this.getBBox().height
+      //     return d.y + OFFSET + h;
+      //   })
 
       group
         .attr('x', function (d: Group) { return d.bounds ? d.bounds.x : 10 })
