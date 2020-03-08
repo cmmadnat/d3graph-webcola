@@ -128,7 +128,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .attr('class', 'graph-cola-label')
       .attr('height', 30)
       .attr('width', (d: Node) => {
-        return 180
+        return Math.min(23, d.name.length) * 8
       })
       .style('stroke', (d: Node) => {
         return icons.labelColorMapping[d.icon]
@@ -137,7 +137,8 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
     label
       .append('text')
       .attr('x', (d: Node) => {
-        return 180 / 2
+        const calcWidth = Math.min(23, d.name.length) * 8
+        return calcWidth / 2
       })
       .attr('text-anchor', 'middle')
       .attr('y', 20)
