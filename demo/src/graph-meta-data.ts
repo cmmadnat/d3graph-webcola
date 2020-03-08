@@ -43,6 +43,7 @@ const GraphMetaData = {
     'intergovernmental': 'e800',
 
 
+    'BusinessEvent': 'e800',
 
     'Publication': 'e80c',
     'Union': 'e80b',
@@ -58,7 +59,8 @@ const GraphMetaData = {
 
     Organization: "e801",
 
-    REDD_TAG: "info",
+    REDD_TAG: "e801",
+
     SanctionDoc: "file-text",
     Crime: "user-secret",
     PEP: "gavel",

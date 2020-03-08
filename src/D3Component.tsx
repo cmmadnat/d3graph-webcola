@@ -21,6 +21,7 @@ export interface Link {
 export interface Node {
   width?: number;
   height?: number;
+  icon: string;
   name: string;
   group: number;
 }
@@ -39,13 +40,15 @@ interface D3ComponentProps {
   icons: Icons
   graph: GraphObject
 }
+const getIcons = (icons: any, iconName: string) => {
+  return icons[iconName]
+}
 
-const D3Component = ({ graph }: D3ComponentProps) => {
+const D3Component = ({ graph, icons }: D3ComponentProps) => {
   let nodeRef: HTMLDivElement | null = null
   useEffect(() => {
     var width = 960,
       height = 500;
-
 
     const color = d3.scaleOrdinal(category20)
     var cola = webCola.d3adaptor(d3)
@@ -110,7 +113,10 @@ const D3Component = ({ graph }: D3ComponentProps) => {
       .data(graph.nodes)
       .enter().append('text')
       .attr('class', 'icon icon-label')
-      .html(d => '&#xe805;')
+      .html(d => {
+        const icon = getIcons(icons.icons, d.icon)
+        return `&#x${icon};`;
+      })
       .call(cola.drag)
 
     cola.on('tick', function () {

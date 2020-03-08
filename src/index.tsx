@@ -18,6 +18,7 @@ export const convert = (data: RawData) => {
     nodes: data.nodes.map(it => {
       const g = groupNoDuplicate.indexOf(it.labels[it.labels.length - 1])
       const d: Node = {
+        icon: it.labels[it.labels.length - 1],
         name: it.properties.event_title ? it.properties.event_title : it.properties.full_name ? it.properties.full_name : 'untitled',
         group: g
       }
