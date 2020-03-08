@@ -1,5 +1,6 @@
 const GraphMetaData = {
   labelColorMapping: {
+    BusinessEvent: "#FE4113",
     sanctionsource: "#FE4113",
     redd_tag: "#5A5475",
     sanctiondoc: "#929292",

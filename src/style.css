@@ -31,4 +31,15 @@
     font-size: 25px;
     text-anchor: middle;
     cursor: move;
+
 }
+.graph-cola-label{
+  fill:white  ;
+  stroke-width:3;
+  stroke:rgb(0,0,0);
+  cursor: move;
+ }
+ .graph-cola-label-text
+ {
+   cursor: move;
+ }

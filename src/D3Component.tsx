@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import * as webCola from 'webcola'
 import { Group } from 'webcola'
 import './style.css'
+const OFFSET = 20
 export interface Icons {
   labelColorMapping: any;
   icons: any;
@@ -77,7 +78,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .nodes(graph.nodes)
       .links(graph.links)
       .groups(groups)
-      .jaccardLinkLengths(40, 0.7)
+      .jaccardLinkLengths(80, 0.7)
       .avoidOverlaps(true)
       .start(50, 0, 50);
 
@@ -109,7 +110,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .text(function (d: any) { return d.name; })
       .call(cola.drag)
 
-    var label = svg.selectAll('.icon-label')
+    var iconLabel = svg.selectAll('.icon-label')
       .data(graph.nodes)
       .enter().append('text')
       .attr('class', 'icon icon-label')
@@ -118,6 +119,32 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         return `&#x${icon};`;
       })
       .call(cola.drag)
+
+    var label = svg.selectAll('.graph-cola-label')
+      .data(graph.nodes)
+      .enter()
+      .append('rect')
+      .attr('rx', 15)
+      .attr('class', 'graph-cola-label')
+      .attr('height', 30)
+      .attr('width', (d: Node) => {
+        return 180
+      })
+      .style('stroke', (d: Node) => {
+        return icons.labelColorMapping[d.icon]
+      })
+      .call(cola.drag)
+
+    var labelText = svg.selectAll('.graph-cola-label-text')
+      .data(graph.nodes)
+      .enter()
+      .append('text')
+      .attr('class', 'graph-cola-label-text')
+      .text((d: Node) => {
+        return d.name.length > 20 ? d.name.substr(0, 20) + '...' : d.name;
+      })
+      .call(cola.drag)
+
 
     cola.on('tick', function () {
       link.attr("x1", function (d: any) { return d.source.x; })
@@ -128,12 +155,31 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       node.attr("cx", function (d: any) { return d.x; })
         .attr("cy", function (d: any) { return d.y; });
 
+      label
+        .attr("x", function (d: any) {
+          var h = this.getBBox().width
+          return d.x - h / 2;
+        })
+        .attr("y", function (d: any) {
+          return d.y + OFFSET
+        })
+      labelText
+        .attr("x", function (d: any) {
+          var h = this.getBBox().width
+          return d.x - h / 2;
+        })
+        .attr("y", function (d: any) {
+          var h = this.getBBox().height
+          return d.y + OFFSET + h;
+        })
+
       group
         .attr('x', function (d: Group) { return d.bounds ? d.bounds.x : 10 })
         .attr('y', function (d: Group) { return d.bounds ? d.bounds.y : 10 })
         .attr('width', function (d: Group) { return d.bounds ? d.bounds.width() : 10 })
         .attr('height', function (d: Group) { return d.bounds ? d.bounds.height() : 10 });
-      label.attr('x', ((d: any) => d.x))
+
+      iconLabel.attr('x', ((d: any) => d.x))
         .attr("y", function (d: any) {
           var h = this.getBBox().height;
           return d.y + h / 4;
