@@ -82,6 +82,14 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .avoidOverlaps(true)
       .start(50, 0, 50);
 
+    const dragFunction = cola.drag()
+    //@ts-ignore
+    dragFunction.on('start', (d: any) => {
+      d.fixed = true
+    })
+
+
+
     var group = svg.selectAll('.group')
       .data(groups)
       .enter().append('rect')
@@ -90,7 +98,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .attr('ry', 5)
       //@ts-ignore
       .style("fill", function (d) { return color(d.id); })
-      .call(cola.drag);
+      .call(dragFunction);
 
     var link = svg.selectAll(".link")
       .data(graph.links)
@@ -105,10 +113,10 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .attr("r", 20)
       // @ts-ignore
       .style("fill", function (d: any) { return color(d.group); })
-      .call(cola.drag)
+      .call(dragFunction)
     node.append("title")
       .text(function (d: any) { return d.name; })
-      .call(cola.drag)
+      .call(dragFunction)
 
     var iconLabel = svg.selectAll('.icon-label')
       .data(graph.nodes)
@@ -118,7 +126,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         const icon = getIcons(icons.icons, d.icon)
         return `&#x${icon};`;
       })
-      .call(cola.drag)
+      .call(dragFunction)
     var label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
       .enter()
@@ -133,7 +141,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .style('stroke', (d: Node) => {
         return icons.labelColorMapping[d.icon]
       })
-      .call(cola.drag)
+      .call(dragFunction)
     label
       .append('text')
       .attr('x', (d: Node) => {
@@ -146,7 +154,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         return d.name.length > 20 ? d.name.substr(0, 20) + '...' : d.name;
       })
       .attr('class', 'graph-cola-label-text')
-      .call(cola.drag)
+      .call(dragFunction)
 
 
     cola.on('tick', function () {
@@ -166,22 +174,6 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
           const y = d.y + OFFSET
           return `translate(${x},${y})`
         })
-      // .attr("x", function (d: any) {
-      //   var h = this.getBBox().width
-      //   return d.x - h / 2;
-      // })
-      // .attr("y", function (d: any) {
-      //   return d.y + OFFSET
-      // })
-      // labelText
-      //   .attr("x", function (d: any) {
-      //     var h = this.getBBox().width
-      //     return d.x - h / 2;
-      //   })
-      //   .attr("y", function (d: any) {
-      //     var h = this.getBBox().height
-      //     return d.y + OFFSET + h;
-      //   })
 
       group
         .attr('x', function (d: Group) { return d.bounds ? d.bounds.x : 10 })
