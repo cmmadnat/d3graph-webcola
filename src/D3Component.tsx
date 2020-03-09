@@ -57,13 +57,13 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
     var outer = d3.select(nodeRef).append("svg")
       .attr("width", width)
       .attr("height", height)
-      .attr("pointer-events", "all");
-
+      .attr("pointer-events", "all")
+      .call(d3.zoom().on("zoom", redraw));
     outer.append('rect')
       .attr('class', 'graph-background')
       .attr('width', "100%")
       .attr('height', "100%")
-      .call(d3.zoom().on("zoom", redraw));
+
 
     var svg = outer
       .append('g');
@@ -92,7 +92,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .nodes(graph.nodes)
       .links(graph.links)
       .groups(groups)
-      .jaccardLinkLengths(80, 0.7)
+      .jaccardLinkLengths(120, 0.7)
       .avoidOverlaps(true)
       .start(50, 0, 50);
 
@@ -117,10 +117,25 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .enter().append("line")
       .attr("class", "link")
       .style("stroke-width", function (d) { return Math.sqrt(d.value); });
+
     var linkLabel = svg.selectAll(".link-label")
       .data(graph.links)
       .enter()
+      .append('g')
+    linkLabel
+      .append('rect')
+      .style('fill', 'white')
+      .attr('x', (d: any, _index, group) => {
+        return 'hello'.length * -5 / 2
+      })
+      .attr('y', -10)
+      .attr('height', 20)
+      .attr('width', (d: any) => {
+        return 10 + 'hello'.length * 5
+      })
+    linkLabel
       .append("text")
+      .attr('x', 5)
       .attr("font-family", "Arial, Helvetica, sans-serif")
       .attr("fill", "Black")
       .style("font", "normal 12px Arial")
@@ -149,6 +164,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         return `&#x${icon};`;
       })
       .call(dragFunction)
+
     var label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
       .enter()
@@ -185,22 +201,12 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         .attr("x2", function (d: any) { return d.target.x; })
         .attr("y2", function (d: any) { return d.target.y; });
 
-      linkLabel.attr("x", function (d: any) {
-        if (d.target.x > d.source.x) {
-          return (d.source.x + (d.target.x - d.source.x) / 2);
-        }
-        else {
-          return (d.target.x + (d.source.x - d.target.x) / 2);
-        }
+      linkLabel.attr('transform', (d: any, index, selections) => {
+        const x = d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2)
+        const y = d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2)
+        return `translate(${x},${y})`
       })
-        .attr("y", function (d: any) {
-          if (d.target.y > d.source.y) {
-            return (d.source.y + (d.target.y - d.source.y) / 2);
-          }
-          else {
-            return (d.target.y + (d.source.y - d.target.y) / 2);
-          }
-        })
+
       node.attr("cx", function (d: any) { return d.x; })
         .attr("cy", function (d: any) { return d.y; });
 
