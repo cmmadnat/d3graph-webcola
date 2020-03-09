@@ -18,6 +18,7 @@ export interface Link {
   source: number;
   target: number;
   value: number;
+  color: string;
 }
 export interface Node {
   width?: number;
@@ -69,9 +70,9 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .append('g');
     const defs = svg.append('defs')
     defs.selectAll('marker').data(graph.links).enter().append('marker')
-      .attr('id', 'arrowhead')
+      .attr('id', (d) => 'arrowhead' + d.value)
       .attr('viewBox', '-0 -5 10 10')
-      .attr('refX', 23)
+      .attr('refX', 22)
       .attr('refY', 0)
       .attr('orient', 'auto')
       .attr('markerWidth', 8)
@@ -79,7 +80,8 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-      .style('stroke', 'none');
+      .style('stroke', 'none')
+      .style('fill', d => d.color)
 
 
     function redraw() {
@@ -130,8 +132,9 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .data(graph.links)
       .enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function (d) { return Math.sqrt(d.value); })
-      .attr('marker-end', 'url(#arrowhead)')
+      .style('stroke', d => d.color)
+      .style("stroke-width", function (d) { return Math.sqrt(4); })
+      .attr('marker-end', d => 'url(#arrowhead' + d.value + ')')
 
 
     var linkLabel = svg.selectAll(".link-label")

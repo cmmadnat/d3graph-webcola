@@ -28,7 +28,8 @@ export const convert = (data: RawData) => {
       const l: Link = {
         source: nodesId.indexOf(it.source),
         target: nodesId.indexOf(it.target),
-        value: 4
+        value: parseInt(it.id),
+        color: '#' + parseInt(it.id).toString(16)
       }
       return l
     })
