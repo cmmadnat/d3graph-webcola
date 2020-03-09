@@ -54,11 +54,20 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
     const color = d3.scaleOrdinal(category20)
     var cola = webCola.d3adaptor(d3)
       .size([width, height]);
-
-    var svg = d3.select(nodeRef).append("svg")
+    var outer = d3.select(nodeRef).append("svg")
       .attr("width", width)
       .attr("height", height)
+      .attr("pointer-events", "all");
+
+    outer.append('rect')
+      .attr('class', 'graph-background')
+      .attr('width', "100%")
+      .attr('height', "100%")
       .call(d3.zoom().on("zoom", redraw));
+
+    var svg = outer
+      .append('g');
+
     function redraw() {
       //@ts-ignore
 
