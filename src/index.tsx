@@ -7,6 +7,7 @@ import * as _ from 'lodash'
 export interface Props {
   graph: GraphObject
   icons: Icons
+  highlights: string[]
 }
 export const convert = (data: RawData) => {
 
@@ -18,6 +19,7 @@ export const convert = (data: RawData) => {
     nodes: data.nodes.map(it => {
       const g = groupNoDuplicate.indexOf(it.labels[it.labels.length - 1])
       const d: Node = {
+        id: it.id,
         icon: it.labels[it.labels.length - 1],
         name: it.properties.event_title ? it.properties.event_title : it.properties.full_name ? it.properties.full_name : 'untitled',
         group: g
@@ -39,9 +41,9 @@ export const convert = (data: RawData) => {
 export default class extends Component<Props> {
 
   render() {
-    const { graph, icons } = this.props
+    const { graph, icons, highlights } = this.props
     return (
-      <Graph graph={graph} icons={icons} />
+      <Graph graph={graph} icons={icons} highlights={highlights} />
     )
   }
 }

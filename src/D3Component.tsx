@@ -13,6 +13,7 @@ export interface Icons {
 export interface GraphObject {
   nodes: Node[];
   links: Link[];
+
 }
 export interface Link {
   source: number;
@@ -21,6 +22,7 @@ export interface Link {
   color: string;
 }
 export interface Node {
+  id: string;
   width?: number;
   height?: number;
   icon: string;
@@ -41,12 +43,13 @@ var category20 = colors("1f77b4aec7e8ff7f0effbb782ca02c98df8ad62728ff98969467bdc
 interface D3ComponentProps {
   icons: Icons
   graph: GraphObject
+  highlights: string[]
 }
 const getIcons = (icons: any, iconName: string) => {
   return icons[iconName]
 }
 
-const D3Component = ({ graph, icons }: D3ComponentProps) => {
+const D3Component = ({ graph, icons, highlights }: D3ComponentProps) => {
   let nodeRef: HTMLDivElement | null = null
   useEffect(() => {
     var width = 960,
@@ -165,7 +168,7 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
     var node = svg.selectAll(".node")
       .data(graph.nodes)
       .enter().append("circle")
-      .attr("class", "node")
+      .attr("class", d => highlights.indexOf(d.id) === -1 ? "node" : 'node-highlight')
       .attr("r", 20)
       // @ts-ignore
       .style("fill", function (d: any) { return color(d.group); })

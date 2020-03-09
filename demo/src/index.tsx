@@ -18,7 +18,7 @@ class Demo extends Component {
       <div>
         <h1>react-nwb-test Demo</h1>
         <i className="icon icon-p-1"></i>
-        <Example graph={data2} icons={icons} />
+        <Example highlights={['1328']} graph={data2} icons={icons} />
       </div>
     )
   }
