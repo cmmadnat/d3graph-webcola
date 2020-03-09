@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import * as d3 from "d3";
 import * as webCola from 'webcola'
 import { Group } from 'webcola'
-import './style.css'
 const OFFSET = 20
 export interface Icons {
   labelColorMapping: any;
@@ -13,7 +12,6 @@ export interface Icons {
 export interface GraphObject {
   nodes: Node[];
   links: Link[];
-
 }
 export interface Link {
   source: number;

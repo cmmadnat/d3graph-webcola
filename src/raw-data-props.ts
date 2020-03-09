@@ -29,7 +29,7 @@ interface Properties2 {
 interface Box {
 }
 
-interface Node {
+export interface Node {
   id: string;
   labels: string[];
   properties: Properties;
