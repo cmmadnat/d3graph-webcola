@@ -67,6 +67,19 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
 
     var svg = outer
       .append('g');
+    svg.append('defs').append('marker')
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '-0 -5 10 10')
+      .attr('refX', 23)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+      .style('stroke', 'none');
+
 
     function redraw() {
       //@ts-ignore
@@ -116,7 +129,9 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .data(graph.links)
       .enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function (d) { return Math.sqrt(d.value); });
+      .style("stroke-width", function (d) { return Math.sqrt(d.value); })
+      .attr('marker-end', 'url(#arrowhead)')
+
 
     var linkLabel = svg.selectAll(".link-label")
       .data(graph.links)
