@@ -70,12 +70,8 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
 
     function redraw() {
       //@ts-ignore
-
-      // console.log(d3.event.transform)
       const transform = d3.event.transform
       svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-      // svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-
     }
     var groupMap: any = {};
     graph.nodes.forEach(function (v, i) {
@@ -106,8 +102,6 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       d.fixed = true
     })
 
-
-
     var group = svg.selectAll('.group')
       .data(groups)
       .enter().append('rect')
@@ -123,6 +117,16 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
       .enter().append("line")
       .attr("class", "link")
       .style("stroke-width", function (d) { return Math.sqrt(d.value); });
+    var linkLabel = svg.selectAll(".link-label")
+      .data(graph.links)
+      .enter()
+      .append("text")
+      .attr("font-family", "Arial, Helvetica, sans-serif")
+      .attr("fill", "Black")
+      .style("font", "normal 12px Arial")
+      .attr("dy", ".35em")
+      .attr('text-anchor', 'middle')
+      .text(function (d) { return 'hello'; });
 
     var node = svg.selectAll(".node")
       .data(graph.nodes)
@@ -181,6 +185,22 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
         .attr("x2", function (d: any) { return d.target.x; })
         .attr("y2", function (d: any) { return d.target.y; });
 
+      linkLabel.attr("x", function (d: any) {
+        if (d.target.x > d.source.x) {
+          return (d.source.x + (d.target.x - d.source.x) / 2);
+        }
+        else {
+          return (d.target.x + (d.source.x - d.target.x) / 2);
+        }
+      })
+        .attr("y", function (d: any) {
+          if (d.target.y > d.source.y) {
+            return (d.source.y + (d.target.y - d.source.y) / 2);
+          }
+          else {
+            return (d.target.y + (d.source.y - d.target.y) / 2);
+          }
+        })
       node.attr("cx", function (d: any) { return d.x; })
         .attr("cy", function (d: any) { return d.y; });
 
