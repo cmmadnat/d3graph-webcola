@@ -1,15 +1,9 @@
 {
   "name": "d3graph-webcola",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "D3 Graph React component on webcola",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "files": [
-    "css",
-    "es",
-    "lib",
-    "umd"
-  ],
   "scripts": {
     "build": "nwb build-react-component --no-demo --copy-files",
     "build:ts": "tsc",
