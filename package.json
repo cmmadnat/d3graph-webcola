@@ -1,7 +1,7 @@
 {
-  "name": "react-nwb-test",
-  "version": "2.1.2",
-  "description": "react-nwb-test React component",
+  "name": "d3graph-webcola",
+  "version": "1.0.0",
+  "description": "D3 Graph React component on webcola",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [

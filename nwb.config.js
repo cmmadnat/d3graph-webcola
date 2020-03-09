@@ -2,16 +2,16 @@ module.exports = {
   type: 'react-component',
   npm: {
     esModules: true,
-    umd: {
-      global: 'ReactNwbTest',
-      externals: {
-        react: 'React',
-      },
-    },
+    umd: false,
+    // umd: {
+    //   global: 'ReactNwbTest',
+    //   externals: {
+    //     react: 'React',
+    //   },
+    // },
   },
   webpack: {
     extra: {
-
       entry: {
         demo: ['./demo/src/index.tsx'],
       },

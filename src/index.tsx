@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import * as React from 'react'
-import Graph, { GraphObject, Icons, Node, Link } from './D3Component'
+import Graph, { GraphObject, Icons, Link, Node } from './D3Component'
 import { RawData } from './raw-data-props'
 import * as _ from 'lodash'
 
