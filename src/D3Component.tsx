@@ -67,7 +67,8 @@ const D3Component = ({ graph, icons }: D3ComponentProps) => {
 
     var svg = outer
       .append('g');
-    svg.append('defs').append('marker')
+    const defs = svg.append('defs')
+    defs.selectAll('marker').data(graph.links).enter().append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '-0 -5 10 10')
       .attr('refX', 23)
