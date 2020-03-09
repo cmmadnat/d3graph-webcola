@@ -12,8 +12,11 @@
   ],
   "scripts": {
     "build": "nwb build-react-component",
+    "build:ts": "tsc",
+    "build:all": "npm-run-all copy:css-to-lib build:ts",
     "clean": "nwb clean-module && nwb clean-demo",
-    "start": "nwb serve-react-demo",
+    "prepublishOnly": "npm run build:ts&&npm run build&&npm run build",
+    "start": "nwb serve-react-demo --port 3333",
     "test": "nwb test-react",
     "test:coverage": "nwb test-react --coverage",
     "test:watch": "nwb test-react --server"
