@@ -1,0 +1,551 @@
+{
+  "result": {
+    "nodes": [
+      {
+        "id": "884",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "industry_type": "Oil & gas equipment & services, oil & gas drilling",
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "sector": "Energy",
+          "name": "Constellation Oil Services Holding S.A"
+        }
+      },
+      {
+        "id": "906",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "industry_type": "Construction & engineering, oil & gas drilling, oil & gas equipment & services, real estate development",
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "sector": "Real estate, energy, capital goods",
+          "name": "Queiroz Galvao S.A."
+        }
+      },
+      {
+        "id": "70",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "symbol": "Db",
+          "name": "Deutsche Bank AG"
+        }
+      },
+      {
+        "id": "279",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "ING Bank N.V."
+        }
+      },
+      {
+        "id": "4",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "symbol": "Bnpqy",
+          "name": "BNP Paribas"
+        }
+      },
+      {
+        "id": "53",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "industry_type": "Diversified banks",
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "sector": "Banks",
+          "symbol": "Bbd",
+          "name": "Banco Bradesco S.A."
+        }
+      },
+      {
+        "id": "71",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "symbol": "C",
+          "name": "Citigroup, Inc"
+        }
+      },
+      {
+        "id": "280",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Eksportkreditt Norge"
+        }
+      },
+      {
+        "id": "604",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "G5 Evercore"
+        }
+      },
+      {
+        "id": "519",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "FTI Consulting, Inc."
+        }
+      },
+      {
+        "id": "584",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Houlihan Lokey, Inc."
+        }
+      },
+      {
+        "id": "167",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Machado Meyer Sendacz e Opice Advogados"
+        }
+      },
+      {
+        "id": "161",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Pinheiro Neto Advogados"
+        }
+      },
+      {
+        "id": "171",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Milbank, Tweed, Hadley & McCloy LLP"
+        }
+      },
+      {
+        "id": "173",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Stocche Forbes Advogados"
+        }
+      },
+      {
+        "id": "172",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "E.Munhoz Advogados"
+        }
+      },
+      {
+        "id": "174",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Norton Rose Fulbright"
+        }
+      },
+      {
+        "id": "523",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Galdino, Coelho, Mendes Advogados "
+        }
+      },
+      {
+        "id": "175",
+        "labels": [
+          "Organization",
+          "REDD_TAG"
+        ],
+        "properties": {
+          "publisher": [
+            "REDD Inteligence"
+          ],
+          "name": "Cleary Gottlieb Steen & Hamilton LLP"
+        }
+      },
+      {
+        "id": "997",
+        "labels": [
+          "REDD_TAG",
+          "BusinessEvent"
+        ],
+        "properties": {
+          "categori_id": "10",
+          "redd_catalyst_id": "668",
+          "redd_main_company": "Constellation Oil Services Holding S.A",
+          "status_id": "1",
+          "uuid": "993d0bbc-432f-11ea-a8cf-000d3a3350bb",
+          "name": "Restructuring, with rehiring of vessels in 2018 major factor"
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "endNode": "997",
+        "id": "884997",
+        "linknum": 1,
+        "multiple_rel": "1",
+        "old_type": "INVOLVED_IN",
+        "source": "884",
+        "startNode": "884",
+        "target": "997",
+        "type": " (49) INVOLVED_IN"
+      },
+      {
+        "endNode": "997",
+        "id": "906997",
+        "linknum": 1,
+        "multiple_rel": "1",
+        "old_type": "ASSOCIATED",
+        "source": "906",
+        "startNode": "906",
+        "target": "997",
+        "type": " (3) ASSOCIATED"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137275",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "type": "Major creditors"
+        },
+        "source": "70",
+        "startNode": "70",
+        "target": "997",
+        "type": "Creditor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137274",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "type": "Major creditors"
+        },
+        "source": "279",
+        "startNode": "279",
+        "target": "997",
+        "type": "Creditor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137272",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "type": "Major creditors"
+        },
+        "source": "4",
+        "startNode": "4",
+        "target": "997",
+        "type": "Creditor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137271",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "type": "Major creditors"
+        },
+        "source": "53",
+        "startNode": "53",
+        "target": "997",
+        "type": "Creditor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137273",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "type": "Major creditors"
+        },
+        "source": "71",
+        "startNode": "71",
+        "target": "997",
+        "type": "Creditor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137276",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "type": "Major creditors"
+        },
+        "source": "280",
+        "startNode": "280",
+        "target": "997",
+        "type": "Creditor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "138091",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors financial advisors"
+        },
+        "source": "604",
+        "startNode": "604",
+        "target": "997",
+        "type": "Financial_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "138092",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors financial advisors"
+        },
+        "source": "519",
+        "startNode": "519",
+        "target": "997",
+        "type": "Financial_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137969",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Company financial advisors"
+        },
+        "source": "584",
+        "startNode": "584",
+        "target": "997",
+        "type": "Financial_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "138399",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors legal advisors"
+        },
+        "source": "167",
+        "startNode": "167",
+        "target": "997",
+        "type": "Legal_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "138400",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors legal advisors"
+        },
+        "source": "161",
+        "startNode": "161",
+        "target": "997",
+        "type": "Legal_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137194",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors legal advisors"
+        },
+        "source": "171",
+        "startNode": "171",
+        "target": "997",
+        "type": "Legal_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137196",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors legal advisors"
+        },
+        "source": "173",
+        "startNode": "173",
+        "target": "997",
+        "type": "Legal_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137195",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors legal advisors"
+        },
+        "source": "172",
+        "startNode": "172",
+        "target": "997",
+        "type": "Legal_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137197",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors legal advisors"
+        },
+        "source": "174",
+        "startNode": "174",
+        "target": "997",
+        "type": "Legal_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "138658",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Company legal advisors"
+        },
+        "source": "523",
+        "startNode": "523",
+        "target": "997",
+        "type": "Legal_Advisor"
+      },
+      {
+        "box": {},
+        "endNode": "997",
+        "id": "137198",
+        "linknum": 1,
+        "properties": {
+          "catalyst_group": "Creditors",
+          "catalyst_sub_group": "Advisors",
+          "type": "Creditors legal advisors"
+        },
+        "source": "175",
+        "startNode": "175",
+        "target": "997",
+        "type": "Legal_Advisor"
+      }
+    ]
+  }
+}

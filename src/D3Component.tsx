@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import * as d3 from "d3";
 import * as webCola from 'webcola'
-import { Group } from 'webcola'
+import { Node, Link, Group, } from 'webcola'
 
 const OFFSET = 20
 export interface Icons {
@@ -11,22 +11,20 @@ export interface Icons {
   images: any;
 }
 export interface GraphObject {
-  nodes: Node[];
-  links: Link[];
+  nodes: ModdedNode[];
+  links: ModdedLink<ModdedNode>[];
+  groups: Group[];
 }
-export interface Link {
-  source: number;
-  target: number;
-  value: number;
+
+export interface ModdedNode extends Node {
+  color?: string;
+  id?: string;
+  icon?: string;
+  name?: string;
+}
+export interface ModdedLink<NodeRefType> extends Link<NodeRefType> {
+  value: string;
   color: string;
-}
-export interface Node {
-  id: string;
-  width?: number;
-  height?: number;
-  icon: string;
-  name: string;
-  group: number;
 }
 
 var colors = function (s: string) {
@@ -43,9 +41,9 @@ interface D3ComponentProps {
   icons: Icons
   graph: GraphObject
   highlights: string[]
-  nodeRightClick?: (node: Node) => void
-  nodeDoubleClick?: (node: Node) => void
-  relationshipDoubleClick?: (link: Link) => void
+  nodeRightClick?: (node: ModdedNode) => void
+  nodeDoubleClick?: (node: ModdedNode) => void
+  relationshipDoubleClick?: (link: Link<ModdedNode>) => void
 
 }
 const getIcons = (icons: any, iconName: string) => {
@@ -95,7 +93,10 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .append('g');
     const defs = svg.append('defs')
     defs.selectAll('marker').data(graph.links).enter().append('marker')
-      .attr('id', (d) => 'arrowhead' + d.value)
+      .attr('id', (d) => {
+
+        return 'arrowhead' + d.value;
+      })
       .attr('viewBox', '-0 -5 10 10')
       .attr('refX', 22)
       .attr('refY', 0)
@@ -114,25 +115,10 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       const transform = d3.event.transform
       svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
     }
-    var groupMap: any = {};
-    graph.nodes.forEach(function (v, i) {
-      var g = v.group;
-      if (typeof groupMap[g] == 'undefined') {
-        groupMap[g] = [];
-      }
-      groupMap[g].push(i);
-
-      v.width = v.height = 10;
-    });
-
-    var groups: any[] = [];
-    for (var g in groupMap) {
-      groups.push({ id: g, leaves: groupMap[g] });
-    }
     cola
       .nodes(graph.nodes)
       .links(graph.links)
-      .groups(groups)
+      .groups(graph.groups.map(it => ({ ...it, padding: 10 })))
       .jaccardLinkLengths(120, 0.7)
       .avoidOverlaps(true)
       .start(50, 0, 50);
@@ -144,7 +130,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     })
 
     var group = svg.selectAll('.group')
-      .data(groups)
+      .data(graph.groups)
       .enter().append('rect')
       .classed('group', true)
       .attr('rx', 5)
@@ -160,7 +146,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .style('stroke', d => d.color)
       .style("stroke-width", function (d) { return Math.sqrt(4); })
       .attr('marker-end', d => 'url(#arrowhead' + d.value + ')')
-      .on('dblclick', (l: Link) => {
+      .on('dblclick', (l: ModdedLink<ModdedNode>) => {
         if (relationshipDoubleClick) {
           relationshipDoubleClick(l)
         }
@@ -171,7 +157,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .data(graph.links)
       .enter()
       .append('g')
-      .on('dblclick', (l: Link) => {
+      .on('dblclick', (l: ModdedLink<ModdedNode>) => {
         if (relationshipDoubleClick) {
           relationshipDoubleClick(l)
         }
@@ -200,10 +186,10 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     var node = svg.selectAll(".node")
       .data(graph.nodes)
       .enter().append("circle")
-      .attr("class", d => highlights.indexOf(d.id) === -1 ? "node" : 'node-highlight')
+      .attr("class", d => d.id && highlights.indexOf(d.id) === -1 ? "node" : 'node-highlight')
       .attr("r", 20)
       // @ts-ignore
-      .style("fill", function (d: any) { return color(d.group); })
+      .style("fill", function (d: ModdedNode) { return d.color })
       .call(dragFunction)
     node.append("title")
       .text(function (d: any) { return d.name; })
@@ -212,7 +198,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .enter().append('text')
       .attr('class', 'icon icon-label')
       .html(d => {
-        const icon = getIcons(icons.icons, d.icon)
+        const icon = d.icon ? getIcons(icons.icons, d.icon) : ''
         return `&#x${icon};`;
       })
     var label = svg.selectAll('.graph-cola-label')
@@ -223,22 +209,22 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .attr('rx', 15)
       .attr('class', 'graph-cola-label')
       .attr('height', 30)
-      .attr('width', (d: Node) => {
-        return Math.min(23, d.name.length) * 8
+      .attr('width', (d: ModdedNode) => {
+        return d.name ? Math.min(23, d.name.length) * 8 : 8
       })
-      .style('stroke', (d: Node) => {
-        return icons.labelColorMapping[d.icon]
+      .style('stroke', (d: ModdedNode) => {
+        return d.icon ? icons.labelColorMapping[d.icon] : 'yellow'
       })
     label
       .append('text')
-      .attr('x', (d: Node) => {
-        const calcWidth = Math.min(23, d.name.length) * 8
+      .attr('x', (d: ModdedNode) => {
+        const calcWidth = d.name ? Math.min(23, d.name.length) * 8 : 8
         return calcWidth / 2
       })
       .attr('text-anchor', 'middle')
       .attr('y', 20)
-      .text((d: Node) => {
-        return d.name.length > 20 ? d.name.substr(0, 20) + '...' : d.name;
+      .text((d: ModdedNode) => {
+        return d.name ? d.name.length > 20 ? d.name.substr(0, 20) + '...' : d.name : ''
       })
       .attr('class', 'graph-cola-label-text')
 

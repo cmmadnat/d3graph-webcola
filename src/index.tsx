@@ -1,45 +1,48 @@
 import { Component } from 'react'
 import * as React from 'react'
-import Graph, { GraphObject, Icons, Link, Node } from './D3Component'
-import { RawData } from './raw-data-props'
-import * as _ from 'lodash'
+import Graph, { GraphObject, Icons, ModdedNode, ModdedLink, } from './D3Component'
+import { RawData2 } from './raw-data-props2'
 
 export interface Props {
   graph: GraphObject
   icons: Icons
   highlights: string[]
-  nodeRightClick?: (node: Node) => void
-  nodeDoubleClick?: (node: Node) => void
-  relationshipDoubleClick?: (link: Link) => void
+  nodeRightClick?: (node: ModdedNode) => void
+  nodeDoubleClick?: (node: ModdedNode) => void
+  relationshipDoubleClick?: (link: ModdedLink<ModdedNode>) => void
 }
-export const convert = (data: RawData) => {
-
-  const groupString = data.nodes.map(it => it.labels[it.labels.length - 1])
-  const groupNoDuplicate = _.uniq(groupString)
-  const nodesId = data.nodes.map(it => it.id)
+export const convert = (data: RawData2, icons: Icons) => {
 
   const output: GraphObject = {
-    nodes: data.nodes.map(it => {
-      const g = groupNoDuplicate.indexOf(it.labels[it.labels.length - 1])
-      const d: Node = {
-        id: it.id,
+    nodes: data.result.nodes.map(it => {
+      const d: ModdedNode = {
+        id: it.id + '',
         icon: it.labels[it.labels.length - 1],
-        name: it.properties.event_title ? it.properties.event_title : it.properties.full_name ? it.properties.full_name : 'untitled',
-        group: g
+        name: it.properties.name,
+        color: icons.labelColorMapping[it.labels.length - 1],
+        x: 0, y: 0
       }
       return d
     }),
-    links: data.relationships.map(it => {
-      const l: Link = {
-        source: nodesId.indexOf(it.source),
-        target: nodesId.indexOf(it.target),
-        value: parseInt(it.id),
+    links: data.result.relationships.map(it => {
+      const source = data.result.nodes.filter(it2 => it2.id === it.source).pop()
+      const target = data.result.nodes.filter(it2 => it2.id === it.target).pop()
+
+
+      // @ts-ignore
+      const l: ModdedLink<ModdedNode> = {
+        source: { ...source, x: 0, y: 0 },
+        target: { ...target, x: 0, y: 0 },
+        value: it.id,
         color: '#' + parseInt(it.id).toString(16)
       }
       return l
+
     })
+    , groups: []
   }
   return output
+
 }
 export default class extends Component<Props> {
 

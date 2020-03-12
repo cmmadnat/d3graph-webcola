@@ -7,13 +7,13 @@ import './fontello-fa3b80f1/css/fontello-embedded.css'
 import '../../src/style.css'
 
 import icons from './graph-meta-data'
-import { RawData } from '../../src/raw-data-props'
-const data: RawData = require('./demo.json')
-// const data = require('./miserable.json')
+import { RawData2 } from '../../src/raw-data-props2'
+
+const data: RawData2 = require('./demo2.json')
 
 class Demo extends Component {
   render() {
-    const data2 = convert(data)
+    const data2 = convert(data, icons)
     return (
       <div>
         <h1>react-nwb-test Demo</h1>
