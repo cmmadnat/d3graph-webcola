@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import * as d3 from "d3";
 import * as webCola from 'webcola'
 import { Group } from 'webcola'
+
 const OFFSET = 20
 export interface Icons {
   labelColorMapping: any;
@@ -46,6 +47,17 @@ interface D3ComponentProps {
 }
 const getIcons = (icons: any, iconName: string) => {
   return icons[iconName]
+}
+const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction: any) => {
+  target.call(dragFunction)
+    .on("contextmenu", function (node: Node) {
+      d3.event.preventDefault();
+      // react on right-clicking
+      if (rightClickFunction) {
+        rightClickFunction(node)
+      }
+
+    });
 }
 
 const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentProps) => {
@@ -173,18 +185,8 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentPr
       // @ts-ignore
       .style("fill", function (d: any) { return color(d.group); })
       .call(dragFunction)
-      .on("contextmenu", function (node, _i) {
-        d3.event.preventDefault();
-        // react on right-clicking
-        if (nodeRightClick) {
-          nodeRightClick(node)
-        }
-
-      });
     node.append("title")
       .text(function (d: any) { return d.name; })
-      .call(dragFunction)
-
     var iconLabel = svg.selectAll('.icon-label')
       .data(graph.nodes)
       .enter().append('text')
@@ -193,8 +195,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentPr
         const icon = getIcons(icons.icons, d.icon)
         return `&#x${icon};`;
       })
-      .call(dragFunction)
-
     var label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
       .enter()
@@ -209,7 +209,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentPr
       .style('stroke', (d: Node) => {
         return icons.labelColorMapping[d.icon]
       })
-      .call(dragFunction)
     label
       .append('text')
       .attr('x', (d: Node) => {
@@ -222,8 +221,10 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentPr
         return d.name.length > 20 ? d.name.substr(0, 20) + '...' : d.name;
       })
       .attr('class', 'graph-cola-label-text')
-      .call(dragFunction)
 
+    applyNodeInteraction(node, dragFunction, nodeRightClick)
+    applyNodeInteraction(label, dragFunction, nodeRightClick)
+    applyNodeInteraction(iconLabel, dragFunction, nodeRightClick)
 
     cola.on('tick', function () {
       link.attr("x1", function (d: any) { return d.source.x; })
