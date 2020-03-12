@@ -12,7 +12,7 @@ export interface Icons {
 }
 export interface GraphObject {
   nodes: ModdedNode[];
-  links: ModdedLink<ModdedNode>[];
+  links: ModdedLink<number>[];
   groups: Group[];
 }
 
@@ -43,7 +43,7 @@ interface D3ComponentProps {
   highlights: string[]
   nodeRightClick?: (node: ModdedNode) => void
   nodeDoubleClick?: (node: ModdedNode) => void
-  relationshipDoubleClick?: (link: Link<ModdedNode>) => void
+  relationshipDoubleClick?: (link: Link<number>) => void
 
 }
 const getIcons = (icons: any, iconName: string) => {
@@ -146,7 +146,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .style('stroke', d => d.color)
       .style("stroke-width", function (d) { return Math.sqrt(4); })
       .attr('marker-end', d => 'url(#arrowhead' + d.value + ')')
-      .on('dblclick', (l: ModdedLink<ModdedNode>) => {
+      .on('dblclick', (l) => {
         if (relationshipDoubleClick) {
           relationshipDoubleClick(l)
         }
@@ -157,7 +157,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .data(graph.links)
       .enter()
       .append('g')
-      .on('dblclick', (l: ModdedLink<ModdedNode>) => {
+      .on('dblclick', (l: ModdedLink<number>) => {
         if (relationshipDoubleClick) {
           relationshipDoubleClick(l)
         }

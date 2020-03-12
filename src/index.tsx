@@ -9,7 +9,7 @@ export interface Props {
   highlights: string[]
   nodeRightClick?: (node: ModdedNode) => void
   nodeDoubleClick?: (node: ModdedNode) => void
-  relationshipDoubleClick?: (link: ModdedLink<ModdedNode>) => void
+  relationshipDoubleClick?: (link: ModdedLink<number>) => void
 }
 export const convert = (data: RawData2, icons: Icons) => {
 
@@ -30,9 +30,9 @@ export const convert = (data: RawData2, icons: Icons) => {
 
 
       // @ts-ignore
-      const l: ModdedLink<ModdedNode> = {
-        source: { ...source, x: 0, y: 0 },
-        target: { ...target, x: 0, y: 0 },
+      const l: ModdedLink<number> = {
+        source: source ? data.result.nodes.indexOf(source) : 0,
+        target: target ? data.result.nodes.indexOf(target) : 1,
         value: it.id,
         color: '#' + parseInt(it.id).toString(16)
       }
