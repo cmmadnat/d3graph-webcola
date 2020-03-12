@@ -42,12 +42,13 @@ interface D3ComponentProps {
   icons: Icons
   graph: GraphObject
   highlights: string[]
+  nodeRightClick?: (node: Node) => void
 }
 const getIcons = (icons: any, iconName: string) => {
   return icons[iconName]
 }
 
-const D3Component = ({ graph, icons, highlights }: D3ComponentProps) => {
+const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentProps) => {
   let nodeRef: HTMLDivElement | null = null
   useEffect(() => {
     var width = 960,
@@ -57,12 +58,13 @@ const D3Component = ({ graph, icons, highlights }: D3ComponentProps) => {
     var cola = webCola.d3adaptor(d3)
       .size([width, height]);
     var outer = d3.select(nodeRef).append("svg")
+      .attr('class', 'cola-graph')
       .attr("width", width)
       .attr("height", height)
       .attr("pointer-events", "all")
       .call(d3.zoom().on("zoom", redraw));
     outer.append('rect')
-      .attr('class', 'graph-background')
+      .attr('class', 'cola-graph-background')
       .attr('width', "100%")
       .attr('height', "100%")
 
@@ -171,6 +173,14 @@ const D3Component = ({ graph, icons, highlights }: D3ComponentProps) => {
       // @ts-ignore
       .style("fill", function (d: any) { return color(d.group); })
       .call(dragFunction)
+      .on("contextmenu", function (node, _i) {
+        d3.event.preventDefault();
+        // react on right-clicking
+        if (nodeRightClick) {
+          nodeRightClick(node)
+        }
+
+      });
     node.append("title")
       .text(function (d: any) { return d.name; })
       .call(dragFunction)

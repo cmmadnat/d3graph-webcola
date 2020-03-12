@@ -8,6 +8,7 @@ export interface Props {
   graph: GraphObject
   icons: Icons
   highlights: string[]
+  nodeRightClick?: (node: Node) => void
 }
 export const convert = (data: RawData) => {
 
@@ -41,9 +42,9 @@ export const convert = (data: RawData) => {
 export default class extends Component<Props> {
 
   render() {
-    const { graph, icons, highlights } = this.props
+    const { graph, icons, highlights, nodeRightClick } = this.props
     return (
-      <Graph graph={graph} icons={icons} highlights={highlights} />
+      <Graph graph={graph} icons={icons} highlights={highlights} nodeRightClick={nodeRightClick} />
     )
   }
 }

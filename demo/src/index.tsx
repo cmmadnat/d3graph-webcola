@@ -3,8 +3,8 @@ import * as React from 'react'
 import { render } from 'react-dom'
 import Example, { convert } from '../../src'
 
-
 import './fontello-fa3b80f1/css/fontello-embedded.css'
+import '../../src/style.css'
 
 import icons from './graph-meta-data'
 import { RawData } from '../../src/raw-data-props'
@@ -18,7 +18,9 @@ class Demo extends Component {
       <div>
         <h1>react-nwb-test Demo</h1>
         <i className="icon icon-p-1"></i>
-        <Example highlights={['1328']} graph={data2} icons={icons} />
+        <Example highlights={['1328']} graph={data2} icons={icons} nodeRightClick={(node) => {
+          console.log(node)
+        }} />
       </div>
     )
   }

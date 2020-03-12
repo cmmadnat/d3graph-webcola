@@ -1,36 +1,36 @@
 
-.node {
+.cola-graph .node {
   stroke: #fff;
   stroke-width: 1.5px;
     cursor: move;
 }
 
-.node-highlight{
+.cola-graph .node-highlight{
   stroke: #FF9281 !important;
   stroke-width: 5px !important ;
 }
 
-.group {
+.cola-graph .group {
   stroke: #fff;
   stroke-width: 1.5px;
   cursor: move;
   opacity: 0.7;
 }
 
-.link {
+.cola-graph .link {
   stroke: #7a4e4e;
   stroke-width: 3px;
   stroke-opacity: 1;
 }
 
-.label {
+.cola-graph .label {
     fill: white;
     font-family: Verdana;
     font-size: 25px;
     text-anchor: middle;
     cursor: move;
 }
-.icon-label{
+.cola-graph .icon-label{
       fill: white;
     font-family: fontello;
     font-size: 25px;
@@ -38,16 +38,16 @@
     cursor: move;
 
 }
-.graph-cola-label{
+.cola-graph .graph-cola-label{
   fill:white  ;
   stroke-width:3;
   stroke:rgb(0,0,0);
   cursor: move;
  }
- .graph-cola-label-text
+ .cola-graph .graph-cola-label-text
  {
    cursor: move;
  }
- .graph-background{
+ .cola-graph-background{
    fill:white;
  }
