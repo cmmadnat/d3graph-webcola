@@ -44,11 +44,14 @@ interface D3ComponentProps {
   graph: GraphObject
   highlights: string[]
   nodeRightClick?: (node: Node) => void
+  nodeDoubleClick?: (node: Node) => void
+  relationshipDoubleClick?: (link: Link) => void
+
 }
 const getIcons = (icons: any, iconName: string) => {
   return icons[iconName]
 }
-const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction: any) => {
+const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction: any, doubleClickFunction: any) => {
   target.call(dragFunction)
     .on("contextmenu", function (node: Node) {
       d3.event.preventDefault();
@@ -56,11 +59,17 @@ const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction
       if (rightClickFunction) {
         rightClickFunction(node)
       }
-
-    });
+    })
+    .on('dblclick', (node: Node) => {
+      d3.event.preventDefault();
+      if (doubleClickFunction) {
+        doubleClickFunction(node)
+      }
+    })
 }
 
-const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentProps) => {
+
+const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick }: D3ComponentProps) => {
   let nodeRef: HTMLDivElement | null = null
   useEffect(() => {
     var width = 960,
@@ -74,7 +83,8 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentPr
       .attr("width", width)
       .attr("height", height)
       .attr("pointer-events", "all")
-      .call(d3.zoom().on("zoom", redraw));
+      .call(d3.zoom().on("zoom", redraw))
+      .on("dblclick.zoom", null)
     outer.append('rect')
       .attr('class', 'cola-graph-background')
       .attr('width', "100%")
@@ -150,12 +160,22 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentPr
       .style('stroke', d => d.color)
       .style("stroke-width", function (d) { return Math.sqrt(4); })
       .attr('marker-end', d => 'url(#arrowhead' + d.value + ')')
+      .on('dblclick', (l: Link) => {
+        if (relationshipDoubleClick) {
+          relationshipDoubleClick(l)
+        }
+      })
 
 
     var linkLabel = svg.selectAll(".link-label")
       .data(graph.links)
       .enter()
       .append('g')
+      .on('dblclick', (l: Link) => {
+        if (relationshipDoubleClick) {
+          relationshipDoubleClick(l)
+        }
+      })
     linkLabel
       .append('rect')
       .style('fill', 'white')
@@ -222,9 +242,9 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick }: D3ComponentPr
       })
       .attr('class', 'graph-cola-label-text')
 
-    applyNodeInteraction(node, dragFunction, nodeRightClick)
-    applyNodeInteraction(label, dragFunction, nodeRightClick)
-    applyNodeInteraction(iconLabel, dragFunction, nodeRightClick)
+    applyNodeInteraction(node, dragFunction, nodeRightClick, nodeDoubleClick)
+    applyNodeInteraction(label, dragFunction, nodeRightClick, nodeDoubleClick)
+    applyNodeInteraction(iconLabel, dragFunction, nodeRightClick, nodeDoubleClick)
 
     cola.on('tick', function () {
       link.attr("x1", function (d: any) { return d.source.x; })

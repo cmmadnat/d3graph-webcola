@@ -9,6 +9,8 @@ export interface Props {
   icons: Icons
   highlights: string[]
   nodeRightClick?: (node: Node) => void
+  nodeDoubleClick?: (node: Node) => void
+  relationshipDoubleClick?: (link: Link) => void
 }
 export const convert = (data: RawData) => {
 
@@ -42,9 +44,9 @@ export const convert = (data: RawData) => {
 export default class extends Component<Props> {
 
   render() {
-    const { graph, icons, highlights, nodeRightClick } = this.props
+    const { graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick } = this.props
     return (
-      <Graph graph={graph} icons={icons} highlights={highlights} nodeRightClick={nodeRightClick} />
+      <Graph graph={graph} icons={icons} highlights={highlights} nodeRightClick={nodeRightClick} nodeDoubleClick={nodeDoubleClick} relationshipDoubleClick={relationshipDoubleClick} />
     )
   }
 }

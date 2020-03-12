@@ -20,6 +20,10 @@ class Demo extends Component {
         <i className="icon icon-p-1"></i>
         <Example highlights={['1328']} graph={data2} icons={icons} nodeRightClick={(node) => {
           console.log(node)
+        }} nodeDoubleClick={() => {
+          console.log('dblclick')
+        }} relationshipDoubleClick={(l) => {
+          console.log(l)
         }} />
       </div>
     )
