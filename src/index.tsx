@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import * as React from 'react'
 import Graph, { GraphObject, Icons, ModdedNode, ModdedLink, } from './D3Component'
-import { RawData2 } from './raw-data-props2'
+import { RawData2, Relationship, Node } from './raw-data-props2'
 import * as _ from 'lodash'
 
 export interface Props {
@@ -12,57 +12,46 @@ export interface Props {
   nodeDoubleClick?: (node: ModdedNode) => void
   relationshipDoubleClick?: (link: ModdedLink<number>) => void
 }
+const getNodeIndexById = (nodes: Node[], relationships: Relationship[], mainGroup: string, subGroup: string | null) => {
+  const nodesId = nodes.map(it => it.id)
+  const nodesIndex = relationships.filter(it => (it.properties ? it.properties.catalyst_group : '') === mainGroup)
+    .filter(it => (it.properties ? it.properties.catalyst_sub_group : 'skdljsldfk') === subGroup)
+    .map(it => it.source).map(it => nodesId.indexOf(it))
+  return nodesIndex
+}
 const extractGroup = (data: RawData2) => {
   const result = data.result
   const relationships = result.relationships
   const nodes = result.nodes
   const allGroup = _.uniq(result.relationships.map(it => it.properties ? it.properties.catalyst_group : '')).filter(it => it)
-  const allSubGroup = _.uniqBy(result.relationships.map(it => ({ group: it.properties ? it.properties.catalyst_group : '', group_subgroup: it.properties ? it.properties.catalyst_sub_group : '' }))
-    .filter(it => it.group_subgroup), 'group_subgroup')
-  //@ts-ignore
-  let mainGroup: { name: string, leaves: number[], padding: number, groups: number[] }[] = []
-  const groupInMainGroupWithoutSubGroup = allGroup.map(groupName => {
-    const leaves = relationships.filter(it2 => (it2.properties ? it2.properties.catalyst_group === groupName : false) &&
-      (it2.properties ? it2.properties.catalyst_sub_group === '' : true)).map(it2 => it2.source)
-      .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
-    return {
-      name: groupName,
-      leaves,
-      padding: 40,
-      groups: [] as number[]
-    }
-  })
-  const groupInMainGroupWithSubGroup = allSubGroup.map(subgroup => {
-    const leaves = relationships.filter(it2 => (it2.properties ? it2.properties.catalyst_group === subgroup.group : false) &&
-      (it2.properties ? it2.properties.catalyst_sub_group === subgroup.group_subgroup : false)).map(it2 => it2.source)
-      .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
-    return {
-      name: subgroup.group_subgroup ? subgroup.group_subgroup : '',
-      leaves,
-      padding: 40,
-      groups: [] as number[]
-    }
-  })
-  let oldGroup = ''
-  let mainGroupCounter = 0
-  let counterGroup: number[] = []
-  allSubGroup.forEach((item, index) => {
-    if (oldGroup === '') oldGroup = item.group
-    if (oldGroup === item.group) counterGroup.push(allGroup.length + index)
-    else if (index === allSubGroup.length - 1) {
-      groupInMainGroupWithoutSubGroup[mainGroupCounter++].groups = counterGroup
-    }
-    else {
-      groupInMainGroupWithoutSubGroup[mainGroupCounter++].groups = counterGroup
-      counterGroup = []
-    }
-  })
-  mainGroup = [...groupInMainGroupWithoutSubGroup, ...groupInMainGroupWithSubGroup]
+  let mainGroup: {
+    name: string;
+    padding: number;
+    leaves: number[];
+    groups?: number[];
+  }[] = []
+  let counterIndex = 0
+  allGroup.map(group => {
+    counterIndex++
+    const subGroups = _.uniq(relationships
+      .filter(it2 => (it2.properties ? it2.properties.catalyst_group : '') === group)
+      .map(it2 => it2.properties ? it2.properties.catalyst_sub_group + '' : '')
+      .filter(it2 => it2 !== 'undefined')
+    )
 
-  // return [{ padding: 10, leaves: [0, 1, 2] },
-  // { padding: 10, leaves: [3, 4] },
-  // ]
+    const groups: number[] = []
+    const subGroupMapped = subGroups.map(sg => {
+      const leaves = getNodeIndexById(nodes, relationships, group, sg)
+      groups.push(counterIndex++)
+      return ({ name: sg, leaves, padding: 40 })
+    })
+    const leaves = getNodeIndexById(nodes, relationships, group, null)
+    return [{ name: group, leaves, padding: 40, groups }, ...subGroupMapped]
+  }).forEach(it => {
+    mainGroup = [...mainGroup, ...it]
+  })
   return mainGroup
+
 }
 
 export const convert = (data: RawData2, icons: Icons) => {

@@ -5,7 +5,7 @@ interface Result {
     nodes: Node[];
     relationships: Relationship[];
 }
-interface Relationship {
+export interface Relationship {
     endNode: string;
     id: string;
     linknum: number;
@@ -25,7 +25,7 @@ interface Properties2 {
 }
 interface Box {
 }
-interface Node {
+export interface Node {
     id: string;
     labels: string[];
     properties: Properties;
