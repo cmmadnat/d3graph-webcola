@@ -21,11 +21,12 @@ const extractGroup = (data: RawData2) => {
     .filter(it => it.group_subgroup), 'group_subgroup')
   //@ts-ignore
   let mainGroup = []
-  const groupInMainGroupWithoutSubGroup = allGroup.map(it => {
-    const leaves = relationships.filter(it2 => (it2.properties ? it2.properties.catalyst_group === it : false) &&
+  const groupInMainGroupWithoutSubGroup = allGroup.map(groupName => {
+    const leaves = relationships.filter(it2 => (it2.properties ? it2.properties.catalyst_group === groupName : false) &&
       (it2.properties ? it2.properties.catalyst_sub_group === '' : false)).map(it2 => it2.source)
       .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
     return {
+      name: groupName,
       leaves,
       padding: 20,
       groups: [] as number[]
@@ -36,6 +37,7 @@ const extractGroup = (data: RawData2) => {
       (it2.properties ? it2.properties.catalyst_sub_group === subgroup.group_subgroup : false)).map(it2 => it2.source)
       .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
     return {
+      name: subgroup.group_subgroup,
       leaves,
       padding: 20,
       groups: [] as number[]

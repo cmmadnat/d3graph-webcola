@@ -10,10 +10,13 @@ export interface Icons {
   icons: any;
   images: any;
 }
+interface GroupWithName extends Group {
+  name: string
+}
 export interface GraphObject {
   nodes: ModdedNode[];
   links: ModdedLink<number>[];
-  groups: Group[];
+  groups: GroupWithName[];
 }
 
 export interface ModdedNode extends Node {
@@ -127,6 +130,12 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       //@ts-ignore
       .style("fill", function (d, index) { return groupColor(index); })
       .call(dragFunction);
+
+    var groupLabel = svg.selectAll('.groupLabel')
+      .data(graph.groups)
+      .enter().append('text')
+      .classed('group-label', true)
+      .text(d => d.name)
 
     var link = svg.selectAll(".link")
       .data(graph.links)
@@ -262,6 +271,12 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
           // @ts-ignore
           return d.bounds.height()
         });
+
+      groupLabel
+        //@ts-ignore
+        .attr('y', d => d.bounds.y + 20)
+        //@ts-ignore
+        .attr('x', d => d.bounds.x + 10)
 
       iconLabel.attr('x', ((d: any) => d.x))
         .attr("y", function (d: any) {
