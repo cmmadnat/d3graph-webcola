@@ -3,7 +3,6 @@ import * as React from 'react'
 import Graph, { GraphObject, Icons, ModdedNode, ModdedLink, } from './D3Component'
 import { RawData2 } from './raw-data-props2'
 import * as _ from 'lodash'
-import { Group } from 'webcola'
 
 export interface Props {
   graph: GraphObject
@@ -21,15 +20,40 @@ const extractGroup = (data: RawData2) => {
   const allSubGroup = _.uniqBy(result.relationships.map(it => ({ group: it.properties ? it.properties.catalyst_group : '', group_subgroup: it.properties ? it.properties.catalyst_sub_group : '' }))
     .filter(it => it.group_subgroup), 'group_subgroup')
   //@ts-ignore
-  const mainGroup: Group[] = allGroup.flatMap(it => {
-    return allSubGroup.filter(it2 => it2.group === it).map(it2 => {
-      const leaves = relationships.filter(it3 => (it3.properties ? it3.properties.catalyst_group : '') == it2.group && (it3.properties ? it3.properties.catalyst_sub_group : '') == it2.group_subgroup)
-        .map(it3 => nodes.findIndex(it4 => it4.id === it3.startNode))
-      return ({ padding: 10, leaves: leaves })
-    })
-
+  let mainGroup = []
+  const groupInMainGroupWithoutSubGroup = allGroup.map(it => {
+    const leaves = relationships.filter(it2 => (it2.properties ? it2.properties.catalyst_group === it : false) &&
+      (it2.properties ? it2.properties.catalyst_sub_group === '' : false)).map(it2 => it2.source)
+      .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
+    return {
+      leaves,
+      padding: 20,
+      groups: [] as number[]
+    }
   })
-  console.log(mainGroup)
+  const groupInMainGroupWithSubGroup = allSubGroup.map(subgroup => {
+    const leaves = relationships.filter(it2 => (it2.properties ? it2.properties.catalyst_group === subgroup.group : false) &&
+      (it2.properties ? it2.properties.catalyst_sub_group === subgroup.group_subgroup : false)).map(it2 => it2.source)
+      .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
+    return {
+      leaves,
+      padding: 20,
+      groups: [] as number[]
+    }
+  })
+  let oldGroup = ''
+  let mainGroupCounter = 0
+  let counterGroup: number[] = []
+  allSubGroup.forEach((item, index) => {
+    if (oldGroup === '') oldGroup = item.group
+    if (oldGroup === item.group) counterGroup.push(index)
+    else {
+      groupInMainGroupWithoutSubGroup[mainGroupCounter++].groups = counterGroup
+      counterGroup = []
+    }
+  })
+  mainGroup = [...groupInMainGroupWithoutSubGroup, ...groupInMainGroupWithSubGroup].filter(it => it.leaves.length !== 0 && it.groups.length === 0)
+
   // return [{ padding: 10, leaves: [0, 1, 2] },
   // { padding: 10, leaves: [3, 4] },
   // ]
@@ -42,9 +66,9 @@ export const convert = (data: RawData2, icons: Icons) => {
     nodes: data.result.nodes.map(it => {
       const d: ModdedNode = {
         id: it.id + '',
-        icon: it.labels[it.labels.length - 1],
+        icon: it.labels[0],
         name: it.properties.name,
-        color: icons.labelColorMapping[it.labels[it.labels.length - 1].toLowerCase()],
+        color: icons.labelColorMapping[it.labels[0].toLowerCase()],
         x: 0, y: 0
       }
       return d

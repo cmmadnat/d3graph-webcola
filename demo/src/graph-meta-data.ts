@@ -60,7 +60,7 @@ const GraphMetaData = {
 
     Organization: "e801",
 
-    REDD_TAG: "e801",
+    REDD_TAG: "f05a",
 
     SanctionDoc: "file-text",
     Crime: "user-secret",

@@ -39,8 +39,8 @@
     cursor: move;
 }
 .cola-graph .icon-label{
-      fill: white;
-    font-family: fontello;
+    fill: white;
+    font-family: fontello, FontAwesome;
     font-size: 25px;
     text-anchor: middle;
     cursor: move;
@@ -59,3 +59,4 @@
  .cola-graph-background{
    fill:white;
  }
+ 
