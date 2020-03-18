@@ -118,7 +118,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     cola
       .nodes(graph.nodes)
       .links(graph.links)
-      .groups(graph.groups.map(it => ({ ...it, padding: 10 })))
+      .groups(graph.groups)
       .jaccardLinkLengths(120, 0.7)
       .avoidOverlaps(true)
       .start(50, 0, 50);
@@ -257,10 +257,22 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         })
 
       group
-        .attr('x', function (d: Group) { return d.bounds ? d.bounds.x : 10 })
-        .attr('y', function (d: Group) { return d.bounds ? d.bounds.y : 10 })
-        .attr('width', function (d: Group) { return d.bounds ? d.bounds.width() : 10 })
-        .attr('height', function (d: Group) { return d.bounds ? d.bounds.height() : 10 });
+        .attr('x', function (d: Group) {
+          // @ts-ignore
+          return d.bounds.x
+        })
+        .attr('y', function (d: Group) {
+          // @ts-ignore
+          return d.bounds.y
+        })
+        .attr('width', function (d: Group) {
+          // @ts-ignore
+          return d.bounds.width()
+        })
+        .attr('height', function (d: Group) {
+          // @ts-ignore
+          return d.bounds.height()
+        });
 
       iconLabel.attr('x', ((d: any) => d.x))
         .attr("y", function (d: any) {
