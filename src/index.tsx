@@ -53,12 +53,11 @@ export const convert = (data: RawData2, icons: Icons) => {
       const source = data.result.nodes.filter(it2 => it2.id === it.source).pop()
       const target = data.result.nodes.filter(it2 => it2.id === it.target).pop()
 
-
       // @ts-ignore
       const l: ModdedLink<number> = {
         source: source ? data.result.nodes.indexOf(source) : 0,
         target: target ? data.result.nodes.indexOf(target) : 1,
-        value: it.id,
+        value: it.type,
         color: '#' + parseInt(it.id).toString(16)
       }
       return l

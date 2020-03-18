@@ -166,12 +166,12 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .append('rect')
       .style('fill', 'white')
       .attr('x', (d: any, _index, group) => {
-        return 'hello'.length * -5 / 2
+        return d.value.length * -5 / 2
       })
       .attr('y', -10)
       .attr('height', 20)
       .attr('width', (d: any) => {
-        return 10 + 'hello'.length * 5
+        return 10 + d.value.length * 5
       })
     linkLabel
       .append("text")
@@ -181,7 +181,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .style("font", "normal 12px Arial")
       .attr("dy", ".35em")
       .attr('text-anchor', 'middle')
-      .text(function (d) { return 'hello'; });
+      .text(function (d) { return d.value; });
 
     var node = svg.selectAll(".node")
       .data(graph.nodes)
