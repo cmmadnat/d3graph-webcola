@@ -8,6 +8,7 @@ import '../../src/style.css'
 
 import icons from './graph-meta-data'
 import { RawData2 } from '../../src/raw-data-props2'
+import './reset.css'
 
 const data: RawData2 = require('./demo2.json')
 
@@ -15,7 +16,7 @@ class Demo extends Component {
   render() {
     const data2 = convert(data, icons)
     return (
-      <div>
+      <div className='hundredP'>
         <h1>react-nwb-test Demo</h1>
         <i className="icon icon-p-1"></i>
         <Example highlights={['1328']} graph={data2} icons={icons} nodeRightClick={(node) => {

@@ -27,14 +27,6 @@ export interface ModdedLink<NodeRefType> extends Link<NodeRefType> {
   color: string;
 }
 
-var colors = function (s: string) {
-  // @ts-ignore
-  return s.match(/.{6}/g).map(function (x: string) {
-    return "#" + x;
-  });
-
-};
-var category20 = colors("1f77b4aec7e8ff7f0effbb782ca02c98df8ad62728ff98969467bdc5b0d58c564bc49c94e377c2f7b6d27f7f7fc7c7c7bcbd22dbdb8d17becf9edae5");
 
 
 interface D3ComponentProps {
@@ -73,13 +65,10 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     var width = 960,
       height = 500;
 
-    const color = d3.scaleOrdinal(category20)
     var cola = webCola.d3adaptor(d3)
       .size([width, height]);
     var outer = d3.select(nodeRef).append("svg")
       .attr('class', 'cola-graph')
-      .attr("width", width)
-      .attr("height", height)
       .attr("pointer-events", "all")
       .call(d3.zoom().on("zoom", redraw))
       .on("dblclick.zoom", null)
@@ -136,7 +125,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .attr('rx', 5)
       .attr('ry', 5)
       //@ts-ignore
-      .style("fill", function (d) { return color(d.id); })
+      .style("fill", function (d, index) { return groupColor(index); })
       .call(dragFunction);
 
     var link = svg.selectAll(".link")
@@ -283,9 +272,13 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
   });
   return (
 
-    <div ref={ref => nodeRef = ref}>
+    <div style={{ height: '100%' }} ref={ref => nodeRef = ref}>
     </div>
   )
 }
 
+const groupColor = (index: number) => {
+  return ['#f6d186', '#fcf7bb', '#cbe2b0', '#f19292',
+    '#f3d1f4', '#f5fcc1', '#bae5e5', '#98d6ea'][index % 8]
+}
 export default D3Component
