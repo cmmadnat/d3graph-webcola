@@ -15,7 +15,8 @@ export interface Props {
 const getNodeIndexById = (nodes: Node[], relationships: Relationship[], mainGroup: string, subGroup: string | null) => {
   const nodesId = nodes.map(it => it.id)
   const nodesIndex = relationships.filter(it => (it.properties ? it.properties.catalyst_group : '') === mainGroup)
-    .filter(it => (it.properties ? it.properties.catalyst_sub_group : 'skdljsldfk') === subGroup)
+    .filter(it => (it.properties ? it.properties.catalyst_sub_group : 'skdljsldfk') === subGroup
+      || (subGroup === null && it.properties && (typeof it.properties.catalyst_sub_group === 'undefined')))
     .map(it => it.source).map(it => nodesId.indexOf(it))
   return nodesIndex
 }
