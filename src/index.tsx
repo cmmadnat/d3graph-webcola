@@ -20,15 +20,15 @@ const extractGroup = (data: RawData2) => {
   const allSubGroup = _.uniqBy(result.relationships.map(it => ({ group: it.properties ? it.properties.catalyst_group : '', group_subgroup: it.properties ? it.properties.catalyst_sub_group : '' }))
     .filter(it => it.group_subgroup), 'group_subgroup')
   //@ts-ignore
-  let mainGroup = []
+  let mainGroup: { name: string, leaves: number[], padding: number, groups: number[] }[] = []
   const groupInMainGroupWithoutSubGroup = allGroup.map(groupName => {
     const leaves = relationships.filter(it2 => (it2.properties ? it2.properties.catalyst_group === groupName : false) &&
-      (it2.properties ? it2.properties.catalyst_sub_group === '' : false)).map(it2 => it2.source)
+      (it2.properties ? it2.properties.catalyst_sub_group === '' : true)).map(it2 => it2.source)
       .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
     return {
       name: groupName,
       leaves,
-      padding: 20,
+      padding: 40,
       groups: [] as number[]
     }
   })
@@ -37,9 +37,9 @@ const extractGroup = (data: RawData2) => {
       (it2.properties ? it2.properties.catalyst_sub_group === subgroup.group_subgroup : false)).map(it2 => it2.source)
       .map(it2 => nodes.filter(it3 => it3.id === it2)[0]).map(it2 => nodes.indexOf(it2))
     return {
-      name: subgroup.group_subgroup,
+      name: subgroup.group_subgroup ? subgroup.group_subgroup : '',
       leaves,
-      padding: 20,
+      padding: 40,
       groups: [] as number[]
     }
   })
@@ -48,13 +48,16 @@ const extractGroup = (data: RawData2) => {
   let counterGroup: number[] = []
   allSubGroup.forEach((item, index) => {
     if (oldGroup === '') oldGroup = item.group
-    if (oldGroup === item.group) counterGroup.push(index)
+    if (oldGroup === item.group) counterGroup.push(allGroup.length + index)
+    else if (index === allSubGroup.length - 1) {
+      groupInMainGroupWithoutSubGroup[mainGroupCounter++].groups = counterGroup
+    }
     else {
       groupInMainGroupWithoutSubGroup[mainGroupCounter++].groups = counterGroup
       counterGroup = []
     }
   })
-  mainGroup = [...groupInMainGroupWithoutSubGroup, ...groupInMainGroupWithSubGroup].filter(it => it.leaves.length !== 0 && it.groups.length === 0)
+  mainGroup = [...groupInMainGroupWithoutSubGroup, ...groupInMainGroupWithSubGroup]
 
   // return [{ padding: 10, leaves: [0, 1, 2] },
   // { padding: 10, leaves: [3, 4] },

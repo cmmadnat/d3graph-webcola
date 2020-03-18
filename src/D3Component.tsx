@@ -274,7 +274,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
 
       groupLabel
         //@ts-ignore
-        .attr('y', d => d.bounds.y + 20)
+        .attr('y', d => d.bounds.y)
         //@ts-ignore
         .attr('x', d => d.bounds.x + 10)
 

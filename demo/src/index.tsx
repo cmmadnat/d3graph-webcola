@@ -10,11 +10,22 @@ import icons from './graph-meta-data'
 import { RawData2 } from '../../src/raw-data-props2'
 import './reset.css'
 
-const data: RawData2 = require('./demo2.json')
+const data: RawData2 = require('./demo3.json')
 
 class Demo extends Component {
   render() {
-    const data2 = convert(data, icons)
+    const data3 = {
+      result: {
+        nodes: data.result.nodes.map(it => ({
+          ...it, properties:
+            // @ts-ignore
+            { name: it.properties.full_name ? it.properties.full_name : it.properties.event_title }
+        })),
+        relationships: data.result.relationships
+      }
+    }
+    // @ts-ignore
+    const data2 = convert(data3, icons)
     return (
       <div className='hundredP'>
         <h1>react-nwb-test Demo</h1>

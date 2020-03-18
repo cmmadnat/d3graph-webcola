@@ -1,0 +1,244 @@
+
+{
+  "result": {
+    "nodes": [
+      {
+        "id": "529", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "Weil, Gotshal & Manges", 
+          "publisher": [
+            "REDD Inteligence"
+          ]
+        }
+      }, 
+      {
+        "id": "135984", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "Qatar Airways"
+        }
+      }, 
+      {
+        "id": "69", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "HSBC Ltd.", 
+          "publisher": [
+            "REDD Inteligence"
+          ], 
+          "symbol": "Hsbc"
+        }
+      }, 
+      {
+        "id": "260", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "Carey Group Inc/The", 
+          "publisher": [
+            "REDD Inteligence"
+          ]
+        }
+      }, 
+      {
+        "id": "708", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "LATAM Airlines Group S.A.", 
+          "industry_type": "Airlines, air freight & logistics", 
+          "publisher": [
+            "REDD Inteligence"
+          ], 
+          "sector": "Transportation", 
+          "symbol": "Ltm"
+        }
+      }, 
+      {
+        "id": "262", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "Sullivan & Cromwell", 
+          "publisher": [
+            "REDD Inteligence"
+          ]
+        }
+      }, 
+      {
+        "id": "240", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "Claro & Cia.", 
+          "publisher": [
+            "REDD Inteligence"
+          ]
+        }
+      }, 
+      {
+        "id": "81", 
+        "labels": [
+          "Organization", 
+          "REDD_TAG"
+        ], 
+        "properties": {
+          "full_name": "JP Morgan Chase Bank", 
+          "publisher": [
+            "REDD Inteligence"
+          ]
+        }
+      }, 
+      {
+        "id": "2165", 
+        "labels": [
+          "REDD_TAG", 
+          "BusinessEvent"
+        ], 
+        "properties": {
+          "categori_id": "11", 
+          "event_title": "LATAM Airlines Group said Qatar Airways agreed to acquire up to 10% stake", 
+          "redd_catalyst_id": "385", 
+          "redd_main_company": "LATAM Airlines Group S.A.", 
+          "status_id": "3", 
+          "uuid": "994e70b2-432f-11ea-a8cf-000d3a3350bb"
+        }
+      }
+    ], 
+    "relationships": [
+      {
+        "box": {}, 
+        "endNode": "2165", 
+        "id": "253210", 
+        "linknum": 1, 
+        "properties": {
+          "catalyst_group": "Bidders/investors", 
+          "catalyst_sub_group": "Advisors", 
+          "type": "Ma bidders legal advisors"
+        }, 
+        "source": "529", 
+        "startNode": "529", 
+        "target": "2165", 
+        "type": "Legal_Advisor"
+      }, 
+      {
+        "box": {}, 
+        "endNode": "2165", 
+        "id": "253177", 
+        "linknum": 1, 
+        "properties": {
+          "catalyst_group": "Bidders/investors", 
+          "type": "Ma bidders"
+        }, 
+        "source": "135984", 
+        "startNode": "135984", 
+        "target": "2165", 
+        "type": "Investor"
+      }, 
+      {
+        "box": {}, 
+        "endNode": "2165", 
+        "id": "244135", 
+        "linknum": 1, 
+        "properties": {
+          "catalyst_group": "Bidders/investors", 
+          "catalyst_sub_group": "Advisors", 
+          "type": "Ma bidders financial advisors"
+        }, 
+        "source": "69", 
+        "startNode": "69", 
+        "target": "2165", 
+        "type": "Financial_Advisor"
+      }, 
+      {
+        "box": {}, 
+        "endNode": "2165", 
+        "id": "244187", 
+        "linknum": 1, 
+        "properties": {
+          "catalyst_group": "Bidders/investors", 
+          "catalyst_sub_group": "Advisors", 
+          "type": "Ma bidders legal advisors"
+        }, 
+        "source": "260", 
+        "startNode": "260", 
+        "target": "2165", 
+        "type": "Legal_Advisor"
+      }, 
+      {
+        "endNode": "2165", 
+        "id": "7082165", 
+        "linknum": 1, 
+        "multiple_rel": "1", 
+        "old_type": "Principal", 
+        "source": "708", 
+        "startNode": "708", 
+        "target": "2165", 
+        "type": " (9) Principal"
+      }, 
+      {
+        "box": {}, 
+        "endNode": "2165", 
+        "id": "138646", 
+        "linknum": 1, 
+        "properties": {
+          "catalyst_group": "Company", 
+          "catalyst_sub_group": "Legaladvisors", 
+          "type": "Targets legal advisors"
+        }, 
+        "source": "262", 
+        "startNode": "262", 
+        "target": "2165", 
+        "type": "Legal_Advisor"
+      }, 
+      {
+        "box": {}, 
+        "endNode": "2165", 
+        "id": "138645", 
+        "linknum": 1, 
+        "properties": {
+          "catalyst_group": "Company", 
+          "catalyst_sub_group": "Legaladvisors", 
+          "type": "Targets legal advisors"
+        }, 
+        "source": "240", 
+        "startNode": "240", 
+        "target": "2165", 
+        "type": "Legal_Advisor"
+      }, 
+      {
+        "box": {}, 
+        "endNode": "2165", 
+        "id": "137952", 
+        "linknum": 1, 
+        "properties": {
+          "catalyst_group": "Company", 
+          "catalyst_sub_group": "Advisors", 
+          "type": "Targets financial advisors"
+        }, 
+        "source": "81", 
+        "startNode": "81", 
+        "target": "2165", 
+        "type": "Financial_Advisor"
+      }
+    ]
+  }
+}
