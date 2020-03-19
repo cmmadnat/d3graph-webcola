@@ -230,6 +230,16 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     applyNodeInteraction(label, dragFunction, nodeRightClick, nodeDoubleClick)
     applyNodeInteraction(iconLabel, dragFunction, nodeRightClick, nodeDoubleClick)
 
+
+    // remove
+    link.exit().remove()
+    linkLabel.exit().remove()
+    node.exit().remove()
+    label.exit().remove()
+    group.exit().remove()
+    groupLabel.exit().remove()
+    iconLabel.exit().remove()
+
     cola.on('tick', function () {
       link.attr("x1", function (d: any) { return d.source.x; })
         .attr("y1", function (d: any) { return d.source.y; })
