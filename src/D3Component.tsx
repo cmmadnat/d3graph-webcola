@@ -272,7 +272,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
 
     var cola = webCola.d3adaptor(d3)
       .size([width, height]);
-    var outer = d3.select(nodeRef).append("svg")
+    var outer = d3.select(nodeRef).select("svg")
       .attr('class', 'cola-graph')
       .attr("pointer-events", "all")
       .call(d3.zoom().on("zoom", redraw))
@@ -302,6 +302,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
   }, [graph])
   return (
     <div style={{ height: '100%' }} ref={ref => nodeRef = ref}>
+      <svg />
     </div>
   )
 }
