@@ -64,25 +64,8 @@ const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction
 
 const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick }: D3ComponentProps) => {
   let nodeRef: HTMLDivElement | null = null
-  useEffect(() => {
-    var width = 960,
-      height = 500;
-
-    var cola = webCola.d3adaptor(d3)
-      .size([width, height]);
-    var outer = d3.select(nodeRef).append("svg")
-      .attr('class', 'cola-graph')
-      .attr("pointer-events", "all")
-      .call(d3.zoom().on("zoom", redraw))
-      .on("dblclick.zoom", null)
-    outer.append('rect')
-      .attr('class', 'cola-graph-background')
-      .attr('width', "100%")
-      .attr('height', "100%")
-
-
-    var svg = outer
-      .append('g');
+  const update = (svg: d3.Selection<SVGGElement, any, null, undefined>, cola: webCola.Layout & webCola.ID3StyleLayoutAdaptor
+  ) => {
     const defs = svg.append('defs')
     defs.selectAll('marker').data(graph.links).enter().append('marker')
       .attr('id', (d) => {
@@ -102,18 +85,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .style('fill', d => d.color)
 
 
-    function redraw() {
-      //@ts-ignore
-      const transform = d3.event.transform
-      svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-    }
-    cola
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .groups(graph.groups)
-      .jaccardLinkLengths(120, 0.7)
-      .avoidOverlaps(true)
-      .start(50, 0, 50);
 
     const dragFunction = cola.drag()
     //@ts-ignore
@@ -294,9 +265,42 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
           return d.y + h / 4;
         });
     });
-  });
-  return (
+  }
+  useEffect(() => {
+    var width = 960,
+      height = 500;
 
+    var cola = webCola.d3adaptor(d3)
+      .size([width, height]);
+    var outer = d3.select(nodeRef).append("svg")
+      .attr('class', 'cola-graph')
+      .attr("pointer-events", "all")
+      .call(d3.zoom().on("zoom", redraw))
+      .on("dblclick.zoom", null)
+    outer.append('rect')
+      .attr('class', 'cola-graph-background')
+      .attr('width', "100%")
+      .attr('height', "100%")
+
+    function redraw() {
+      //@ts-ignore
+      const transform = d3.event.transform
+      svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+    }
+
+    var svg = outer
+      .append('g');
+    cola
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .groups(graph.groups)
+      .jaccardLinkLengths(120, 0.7)
+      .avoidOverlaps(true)
+      .start(50, 0, 50);
+
+    update(svg, cola)
+  }, [graph])
+  return (
     <div style={{ height: '100%' }} ref={ref => nodeRef = ref}>
     </div>
   )
