@@ -28,6 +28,7 @@ export interface ModdedNode extends Node {
 export interface ModdedLink<NodeRefType> extends Link<NodeRefType> {
   value: string;
   color: string;
+  id: string;
 }
 
 

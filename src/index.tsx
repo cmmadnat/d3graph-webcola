@@ -77,7 +77,8 @@ export const convert = (data: RawData2, icons: Icons) => {
         source: source ? data.result.nodes.indexOf(source) : 0,
         target: target ? data.result.nodes.indexOf(target) : 1,
         value: it.type,
-        color: '#' + parseInt(it.id).toString(16)
+        color: '#' + parseInt(it.id).toString(16),
+        id: it.id
       }
       return l
 
