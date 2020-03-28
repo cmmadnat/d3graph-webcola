@@ -165,18 +165,24 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     node.append("title")
       .text(function (d: any) { return d.name; })
     var iconLabel = svg.selectAll('.icon-label')
-      .data(graph.nodes)
+      .data(graph.nodes.filter(d => typeof d.svg === 'undefined'))
       .enter().append('text')
       .attr('class', 'icon icon-label')
       .html(d => {
-        if (d.svg) {
-          return d.svg
-        }
-        else {
-          const icon = d.icon ? getIcons(icons.icons, d.icon) : ''
-          return `&#x${icon};`;
-        }
+        const icon = d.icon ? getIcons(icons.icons, d.icon) : ''
+        return `&#x${icon};`;
       })
+    var iconSvgLabel = svg.selectAll('.icon-svg-label')
+      .data(graph.nodes.filter(d => typeof d.svg !== 'undefined'))
+      .enter().append('g')
+      .attr('class', 'icon-svg-label')
+      .html(d => {
+        if (d.svg)
+          return d.svg
+        return ''
+      })
+
+
     var label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
       .enter()
@@ -267,6 +273,11 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         .attr('x', d => d.bounds.x + 10)
 
       iconLabel.attr('x', ((d: any) => d.x))
+        .attr("y", function (d: any) {
+          var h = this.getBBox().height;
+          return d.y + h / 4;
+        });
+      iconSvgLabel.attr('x', ((d: any) => d.x))
         .attr("y", function (d: any) {
           var h = this.getBBox().height;
           return d.y + h / 4;
