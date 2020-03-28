@@ -24,6 +24,7 @@ export interface ModdedNode extends Node {
   id?: string;
   icon?: string;
   name?: string;
+  svg?: string;
 }
 export interface ModdedLink<NodeRefType> extends Link<NodeRefType> {
   value: string;
@@ -168,8 +169,13 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .enter().append('text')
       .attr('class', 'icon icon-label')
       .html(d => {
-        const icon = d.icon ? getIcons(icons.icons, d.icon) : ''
-        return `&#x${icon};`;
+        if (d.svg) {
+          return d.svg
+        }
+        else {
+          const icon = d.icon ? getIcons(icons.icons, d.icon) : ''
+          return `&#x${icon};`;
+        }
       })
     var label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
