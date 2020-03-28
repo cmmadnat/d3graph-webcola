@@ -277,17 +277,14 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
           var h = this.getBBox().height;
           return d.y + h / 4;
         });
-      iconSvgLabel.attr('x', ((d: any) => d.x))
-        .attr("y", function (d: any) {
-          var h = this.getBBox().height;
-          return d.y + h / 4;
-        });
+
 
       iconSvgLabel.attr('transform', (d: any, index, selection) => {
         // @ts-ignore
+        const w = selection[index].getBBox().width
         const h = selection[index].getBBox().height
-        const x = d.x
-        const y = d.y + h / 4
+        const x = d.x - w / 2 - 2
+        const y = d.y - h / 2 - 2
         return `translate(${x},${y})`
       })
     });
