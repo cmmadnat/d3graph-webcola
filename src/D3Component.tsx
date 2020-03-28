@@ -282,6 +282,14 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
           var h = this.getBBox().height;
           return d.y + h / 4;
         });
+
+      iconSvgLabel.attr('transform', (d: any, index, selection) => {
+        // @ts-ignore
+        const h = selection[index].getBBox().height
+        const x = d.x
+        const y = d.y + h / 4
+        return `translate(${x},${y})`
+      })
     });
   }
   useEffect(() => {
