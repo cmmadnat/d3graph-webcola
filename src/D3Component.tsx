@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { useEffect } from 'react'
 import * as d3 from "d3";
+import { Selection } from 'd3-selection'
 import * as webCola from 'webcola'
 import { Node, Link, Group, } from 'webcola'
 
@@ -30,11 +31,11 @@ export interface ModdedLink<NodeRefType> extends Link<NodeRefType> {
   value: string;
   color: string;
   id: string;
+  arrowHead?: boolean;
 }
 
-
-
 interface D3ComponentProps {
+  showLabel?: boolean
   icons: Icons
   graph: GraphObject
   highlights: string[]
@@ -64,7 +65,9 @@ const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction
 }
 
 
-const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick }: D3ComponentProps) => {
+const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick, showLabel }: D3ComponentProps) => {
+  const hasLabel = typeof showLabel === 'undefined' ? true : showLabel
+
   let nodeRef: HTMLDivElement | null = null
   const update = (svg: d3.Selection<SVGGElement, any, null, undefined>, cola: webCola.Layout & webCola.ID3StyleLayoutAdaptor
   ) => {
@@ -72,7 +75,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     defs.selectAll('marker').data(graph.links).enter().append('marker')
       .attr('id', (d) => {
 
-        return 'arrowhead' + d.value;
+        return 'arrowhead' + d.id;
       })
       .attr('viewBox', '-0 -5 10 10')
       .attr('refX', 22)
@@ -100,7 +103,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .classed('group', true)
       .attr('rx', 5)
       .attr('ry', 5)
-      //@ts-ignore
+      //@ts-ignor
       .style("fill", function (d, index) { return groupColor(index); })
       .call(dragFunction);
 
@@ -116,43 +119,47 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .attr("class", "link")
       .style('stroke', d => d.color)
       .style("stroke-width", function (d) { return Math.sqrt(4); })
-      .attr('marker-end', d => 'url(#arrowhead' + d.value + ')')
+      .attr('marker-end', d => typeof d.arrowHead === 'undefined' || d.arrowHead ? 'url(#arrowhead' + d.id + ')' : '')
       .on('dblclick', (l) => {
         if (relationshipDoubleClick) {
           relationshipDoubleClick(l)
         }
       })
 
+    let linkLabel: Selection<SVGGElement, ModdedLink<number>, SVGGElement, any> | null = null
+    if (hasLabel) {
 
-    var linkLabel = svg.selectAll(".link-label")
-      .data(graph.links)
-      .enter()
-      .append('g')
-      .on('dblclick', (l: ModdedLink<number>) => {
-        if (relationshipDoubleClick) {
-          relationshipDoubleClick(l)
-        }
-      })
-    linkLabel
-      .append('rect')
-      .style('fill', 'white')
-      .attr('x', (d: any, _index, group) => {
-        return d.value.length * -5 / 2
-      })
-      .attr('y', -10)
-      .attr('height', 20)
-      .attr('width', (d: any) => {
-        return 10 + d.value.length * 5
-      })
-    linkLabel
-      .append("text")
-      .attr('x', 5)
-      .attr("font-family", "Arial, Helvetica, sans-serif")
-      .attr("fill", "Black")
-      .style("font", "normal 12px Arial")
-      .attr("dy", ".35em")
-      .attr('text-anchor', 'middle')
-      .text(function (d) { return d.value; });
+      linkLabel = svg.selectAll(".link-label")
+        .data(graph.links)
+        .enter()
+        .append('g')
+        .on('dblclick', (l: ModdedLink<number>) => {
+          if (relationshipDoubleClick) {
+            relationshipDoubleClick(l)
+          }
+        })
+      linkLabel
+        .append('rect')
+        .style('fill', 'white')
+        .attr('x', (d: any, _index, group) => {
+          return d.value.length * -5 / 2
+        })
+        .attr('y', -10)
+        .attr('height', 20)
+        .attr('width', (d: any) => {
+          return 10 + d.value.length * 5
+        })
+      linkLabel
+        .append("text")
+        .attr('x', 5)
+        .attr("font-family", "Arial, Helvetica, sans-serif")
+        .attr("fill", "Black")
+        .style("font", "normal 12px Arial")
+        .attr("dy", ".35em")
+        .attr('text-anchor', 'middle')
+        .text(function (d) { return d.value; });
+      linkLabel.exit().remove()
+    }
 
     var node = svg.selectAll(".node")
       .data(graph.nodes)
@@ -181,7 +188,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
           return d.svg
         return ''
       })
-
 
     var label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
@@ -213,11 +219,10 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     applyNodeInteraction(node, dragFunction, nodeRightClick, nodeDoubleClick)
     applyNodeInteraction(label, dragFunction, nodeRightClick, nodeDoubleClick)
     applyNodeInteraction(iconLabel, dragFunction, nodeRightClick, nodeDoubleClick)
-
+    applyNodeInteraction(iconSvgLabel, dragFunction, nodeRightClick, nodeDoubleClick)
 
     // remove
     link.exit().remove()
-    linkLabel.exit().remove()
     node.exit().remove()
     label.exit().remove()
     group.exit().remove()
@@ -230,11 +235,12 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         .attr("x2", function (d: any) { return d.target.x; })
         .attr("y2", function (d: any) { return d.target.y; });
 
-      linkLabel.attr('transform', (d: any, index, selections) => {
-        const x = d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2)
-        const y = d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2)
-        return `translate(${x},${y})`
-      })
+      if (hasLabel && linkLabel)
+        linkLabel.attr('transform', (d: any, index, selections) => {
+          const x = d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2)
+          const y = d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2)
+          return `translate(${x},${y})`
+        })
 
       node.attr("cx", function (d: any) { return d.x; })
         .attr("cy", function (d: any) { return d.y; });
