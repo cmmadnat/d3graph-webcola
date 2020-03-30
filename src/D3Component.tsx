@@ -76,6 +76,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     iconLabel: d3.Selection<SVGTextElement, ModdedNode, SVGGElement, any>,
     label: d3.Selection<SVGGElement, ModdedNode, SVGGElement, any>,
     iconSvgLabel: d3.Selection<SVGGElement, ModdedNode, SVGGElement, any>
+  let linkLabel: Selection<SVGGElement, ModdedLink<number>, SVGGElement, any> | null = null
   const update = (svg: d3.Selection<SVGGElement, any, null, undefined>, cola: webCola.Layout & webCola.ID3StyleLayoutAdaptor
   ) => {
     svg.selectAll('defs').selectAll('marker').data(graph.links).enter().append('marker')
@@ -132,7 +133,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         }
       })
 
-    let linkLabel: Selection<SVGGElement, ModdedLink<number>, SVGGElement, any> | null = null
     if (hasLabel) {
 
       linkLabel = svg.selectAll(".link-label")
