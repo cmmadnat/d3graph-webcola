@@ -92,9 +92,9 @@ export const convert = (data: RawData2, icons: Icons) => {
 }
 export default class extends Component<Props> {
   render() {
-    const { graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick, showLabel } = this.props
+    const { graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick } = this.props
     return (
-      <Graph showLabel={showLabel} graph={graph} icons={icons} highlights={highlights} nodeRightClick={nodeRightClick} nodeDoubleClick={nodeDoubleClick} relationshipDoubleClick={relationshipDoubleClick} />
+      <Graph graph={graph} icons={icons} highlights={highlights} nodeRightClick={nodeRightClick} nodeDoubleClick={nodeDoubleClick} relationshipDoubleClick={relationshipDoubleClick} />
     )
   }
 }

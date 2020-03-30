@@ -28,7 +28,6 @@ const Demo = () => {
     }
     const data2 = convert(data3, icons)
     setData(data2)
-
   }, [])
   // @ts-ignore
   return (
