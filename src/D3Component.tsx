@@ -328,6 +328,25 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .start(50, 0, 50);
 
     update(svg, cola)
+  }, [])
+  useEffect(() => {
+
+    var width = 960,
+      height = 500;
+
+    var cola = webCola.d3adaptor(d3)
+      .size([width, height]);
+    cola
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .groups(graph.groups)
+      .jaccardLinkLengths(120, 0.7)
+      .avoidOverlaps(true)
+      .start(50, 0, 50);
+
+    var outer = d3.select(nodeRef).select("svg")
+    //@ts-ignore
+    update(outer, cola)
   }, [graph])
   return (
     <div style={{ height: '100%' }} ref={ref => nodeRef = ref}>
