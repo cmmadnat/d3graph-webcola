@@ -69,10 +69,16 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
   const hasLabel = typeof showLabel === 'undefined' ? true : showLabel
 
   let nodeRef: HTMLDivElement | null = null
+  let group: d3.Selection<SVGRectElement, GroupWithName, SVGGElement, any>,
+    groupLabel: d3.Selection<SVGTextElement, GroupWithName, SVGGElement, any>,
+    link: d3.Selection<SVGLineElement, ModdedLink<number>, SVGGElement, any>,
+    node: string & d3.Selection<SVGCircleElement, ModdedNode, SVGGElement, any>,
+    iconLabel: d3.Selection<SVGTextElement, ModdedNode, SVGGElement, any>,
+    label: d3.Selection<SVGGElement, ModdedNode, SVGGElement, any>,
+    iconSvgLabel: d3.Selection<SVGGElement, ModdedNode, SVGGElement, any>
   const update = (svg: d3.Selection<SVGGElement, any, null, undefined>, cola: webCola.Layout & webCola.ID3StyleLayoutAdaptor
   ) => {
-    const defs = svg.append('defs')
-    defs.selectAll('marker').data(graph.links).enter().append('marker')
+    svg.selectAll('defs').selectAll('marker').data(graph.links).enter().append('marker')
       .attr('id', (d) => {
 
         return 'arrowhead' + d.id;
@@ -97,7 +103,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       d.fixed = true
     })
 
-    var group = svg.selectAll('.group')
+    group = svg.selectAll('.group')
       .data(graph.groups)
       .enter().append('rect')
       .classed('group', true)
@@ -107,13 +113,13 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .style("fill", function (d, index) { return groupColor(index); })
       .call(dragFunction);
 
-    var groupLabel = svg.selectAll('.groupLabel')
+    groupLabel = svg.selectAll('.groupLabel')
       .data(graph.groups)
       .enter().append('text')
       .classed('group-label', true)
       .text(d => d.name)
 
-    var link = svg.selectAll(".link")
+    link = svg.selectAll(".link")
       .data(graph.links)
       .enter().append("line")
       .attr("class", "link")
@@ -161,7 +167,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       linkLabel.exit().remove()
     }
 
-    var node = svg.selectAll(".node")
+    node = svg.selectAll(".node")
       .data(graph.nodes)
       .enter().append("circle")
       .attr("class", d => d.id && highlights.indexOf(d.id) === -1 ? "node" : 'node-highlight')
@@ -171,7 +177,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .call(dragFunction)
     node.append("title")
       .text(function (d: any) { return d.name; })
-    var iconLabel = svg.selectAll('.icon-label')
+    iconLabel = svg.selectAll('.icon-label')
       .data(graph.nodes.filter(d => typeof d.svg === 'undefined'))
       .enter().append('text')
       .attr('class', 'icon icon-label')
@@ -179,7 +185,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         const icon = d.icon ? getIcons(icons.icons, d.icon) : ''
         return `&#x${icon};`;
       })
-    var iconSvgLabel = svg.selectAll('.icon-svg-label')
+    iconSvgLabel = svg.selectAll('.icon-svg-label')
       .data(graph.nodes.filter(d => typeof d.svg !== 'undefined'))
       .enter().append('g')
       .attr('class', 'icon-svg-label')
@@ -189,7 +195,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         return ''
       })
 
-    var label = svg.selectAll('.graph-cola-label')
+    label = svg.selectAll('.graph-cola-label')
       .data(graph.nodes)
       .enter()
       .append('g')
@@ -326,6 +332,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .jaccardLinkLengths(120, 0.7)
       .avoidOverlaps(true)
       .start(50, 0, 50);
+    svg.append('defs')
 
     update(svg, cola)
   }, [])
