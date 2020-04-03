@@ -35,7 +35,18 @@ const Demo = () => {
       <h1>react-nwb-test Demo</h1>
       <i className="icon icon-p-1"></i>
       <Example highlights={['1328']} graph={data} icons={icons} nodeRightClick={(node) => {
-        console.log(node)
+        const data3 = {
+          result: {
+            nodes: rawData.result.nodes.filter(it => it.id !== '529').map(it => ({
+              ...it, properties:
+                // @ts-ignore
+                { name: it.properties.full_name ? it.properties.full_name : it.properties.event_title }
+            })),
+            relationships: rawData.result.relationships.filter(it => it.source !== '529')
+          }
+        }
+        const data2 = convert(data3, icons)
+        setData(data2)
       }} nodeDoubleClick={() => {
         console.log('dblclick')
       }} relationshipDoubleClick={(l) => {

@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useEffect } from 'react'
 import * as d3 from "d3";
-import { Selection } from 'd3-selection'
 import * as webCola from 'webcola'
 import { Node, Link, Group, } from 'webcola'
 
@@ -35,7 +34,6 @@ export interface ModdedLink<NodeRefType> extends Link<NodeRefType> {
 }
 
 interface D3ComponentProps {
-  showLabel?: boolean
   icons: Icons
   graph: GraphObject
   highlights: string[]
@@ -65,13 +63,42 @@ const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction
 }
 
 
-const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick, showLabel }: D3ComponentProps) => {
-  const hasLabel = typeof showLabel === 'undefined' ? true : showLabel
+const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick }: D3ComponentProps) => {
 
   let nodeRef: HTMLDivElement | null = null
-  const update = (svg: d3.Selection<SVGGElement, any, null, undefined>, cola: webCola.Layout & webCola.ID3StyleLayoutAdaptor
-  ) => {
-    const defs = svg.append('defs')
+
+  useEffect(() => {
+    var width = 960,
+      height = 500;
+    var cola = webCola.d3adaptor(d3)
+      .size([width, height]);
+    cola
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .groups(graph.groups)
+      .jaccardLinkLengths(120, 0.7)
+      .avoidOverlaps(true)
+      .start(50, 0, 50);
+    const redraw = () => {
+      //@ts-ignore
+      const transform = d3.event.transform
+      svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+    }
+
+    var outer = d3.select(nodeRef).select("svg")
+      .attr('class', 'cola-graph')
+      .attr("pointer-events", "all")
+      .call(d3.zoom().on("zoom", redraw))
+      .on("dblclick.zoom", null)
+    outer.select('rect')
+      .attr('class', 'cola-graph-background')
+      .attr('width', "100%")
+      .attr('height', "100%")
+
+    let svg = outer
+      .select('g');
+
+    const defs = svg.select('defs')
     defs.selectAll('marker').data(graph.links).enter().append('marker')
       .attr('id', (d) => {
 
@@ -97,8 +124,16 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       d.fixed = true
     })
 
-    var group = svg.selectAll('.group')
-      .data(graph.groups)
+    let node = svg.selectAll(".node")
+    let link = svg.selectAll(".link")
+    let group = svg.selectAll('.group')
+    let groupLabel = svg.selectAll('.group-label')
+    let label = svg.selectAll('.graph-cola-label')
+    let linkLabel = svg.selectAll(".link-label")
+    let iconSvgLabel = svg.selectAll('.icon-svg-label')
+    let iconLabel = svg.selectAll('.icon-label')
+
+    group.data(graph.groups)
       .enter().append('rect')
       .classed('group', true)
       .attr('rx', 5)
@@ -107,14 +142,12 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .style("fill", function (d, index) { return groupColor(index); })
       .call(dragFunction);
 
-    var groupLabel = svg.selectAll('.groupLabel')
-      .data(graph.groups)
+    groupLabel.data(graph.groups)
       .enter().append('text')
       .classed('group-label', true)
       .text(d => d.name)
 
-    var link = svg.selectAll(".link")
-      .data(graph.links)
+    link.data(graph.links)
       .enter().append("line")
       .attr("class", "link")
       .style('stroke', d => d.color)
@@ -126,43 +159,37 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         }
       })
 
-    let linkLabel: Selection<SVGGElement, ModdedLink<number>, SVGGElement, any> | null = null
-    if (hasLabel) {
+    linkLabel.data(graph.links)
+      .enter()
+      .append('g')
+      .attr('class', 'link-label')
+      .on('dblclick', (l: ModdedLink<number>) => {
+        if (relationshipDoubleClick) {
+          relationshipDoubleClick(l)
+        }
+      })
+    linkLabel
+      .append('rect')
+      .style('fill', 'white')
+      .attr('x', (d: any, _index, group) => {
+        return d.value.length * -5 / 2
+      })
+      .attr('y', -10)
+      .attr('height', 20)
+      .attr('width', (d: any) => {
+        return 10 + d.value.length * 5
+      })
+    linkLabel
+      .append("text")
+      .attr('x', 5)
+      .attr("font-family", "Arial, Helvetica, sans-serif")
+      .attr("fill", "Black")
+      .style("font", "normal 12px Arial")
+      .attr("dy", ".35em")
+      .attr('text-anchor', 'middle')
+      .text(function (d: ModdedLink<ModdedNode>) { return d.value; });
 
-      linkLabel = svg.selectAll(".link-label")
-        .data(graph.links)
-        .enter()
-        .append('g')
-        .on('dblclick', (l: ModdedLink<number>) => {
-          if (relationshipDoubleClick) {
-            relationshipDoubleClick(l)
-          }
-        })
-      linkLabel
-        .append('rect')
-        .style('fill', 'white')
-        .attr('x', (d: any, _index, group) => {
-          return d.value.length * -5 / 2
-        })
-        .attr('y', -10)
-        .attr('height', 20)
-        .attr('width', (d: any) => {
-          return 10 + d.value.length * 5
-        })
-      linkLabel
-        .append("text")
-        .attr('x', 5)
-        .attr("font-family", "Arial, Helvetica, sans-serif")
-        .attr("fill", "Black")
-        .style("font", "normal 12px Arial")
-        .attr("dy", ".35em")
-        .attr('text-anchor', 'middle')
-        .text(function (d) { return d.value; });
-      linkLabel.exit().remove()
-    }
-
-    var node = svg.selectAll(".node")
-      .data(graph.nodes)
+    node.data(graph.nodes)
       .enter().append("circle")
       .attr("class", d => d.id && highlights.indexOf(d.id) === -1 ? "node" : 'node-highlight')
       .attr("r", 20)
@@ -171,16 +198,15 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .call(dragFunction)
     node.append("title")
       .text(function (d: any) { return d.name; })
-    var iconLabel = svg.selectAll('.icon-label')
-      .data(graph.nodes.filter(d => typeof d.svg === 'undefined'))
+
+    iconLabel.data(graph.nodes.filter(d => typeof d.svg === 'undefined'))
       .enter().append('text')
       .attr('class', 'icon icon-label')
       .html(d => {
         const icon = d.icon ? getIcons(icons.icons, d.icon) : ''
         return `&#x${icon};`;
       })
-    var iconSvgLabel = svg.selectAll('.icon-svg-label')
-      .data(graph.nodes.filter(d => typeof d.svg !== 'undefined'))
+    iconSvgLabel.data(graph.nodes.filter(d => typeof d.svg !== 'undefined'))
       .enter().append('g')
       .attr('class', 'icon-svg-label')
       .html(d => {
@@ -189,13 +215,13 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         return ''
       })
 
-    var label = svg.selectAll('.graph-cola-label')
-      .data(graph.nodes)
+    label = label.data(graph.nodes)
       .enter()
       .append('g')
+      .attr('class', 'graph-cola-label')
     label.append('rect')
       .attr('rx', 15)
-      .attr('class', 'graph-cola-label')
+      .attr('class', 'graph-cola-label-rect')
       .attr('height', 30)
       .attr('width', (d: ModdedNode) => {
         return d.name ? Math.min(23, d.name.length) * 8 : 8
@@ -221,26 +247,33 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     applyNodeInteraction(iconLabel, dragFunction, nodeRightClick, nodeDoubleClick)
     applyNodeInteraction(iconSvgLabel, dragFunction, nodeRightClick, nodeDoubleClick)
 
-    // remove
-    link.exit().remove()
     node.exit().remove()
     label.exit().remove()
+    iconLabel.exit().remove()
+    iconSvgLabel.exit().remove()
     group.exit().remove()
     groupLabel.exit().remove()
-    iconLabel.exit().remove()
 
     cola.on('tick', function () {
+      let node = svg.selectAll(".node")
+      let link = svg.selectAll(".link")
+      let group = svg.selectAll('.group')
+      let groupLabel = svg.selectAll('.group-label')
+      let label = svg.selectAll('.graph-cola-label')
+      let linkLabel = svg.selectAll(".link-label")
+      let iconSvgLabel = svg.selectAll('.icon-svg-label')
+      let iconLabel = svg.selectAll('.icon-label')
+
       link.attr("x1", function (d: any) { return d.source.x; })
         .attr("y1", function (d: any) { return d.source.y; })
         .attr("x2", function (d: any) { return d.target.x; })
         .attr("y2", function (d: any) { return d.target.y; });
 
-      if (hasLabel && linkLabel)
-        linkLabel.attr('transform', (d: any, index, selections) => {
-          const x = d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2)
-          const y = d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2)
-          return `translate(${x},${y})`
-        })
+      linkLabel.attr('transform', (d: any, index, selections) => {
+        const x = d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2)
+        const y = d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2)
+        return `translate(${x},${y})`
+      })
 
       node.attr("cx", function (d: any) { return d.x; })
         .attr("cy", function (d: any) { return d.y; });
@@ -280,6 +313,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
 
       iconLabel.attr('x', ((d: any) => d.x))
         .attr("y", function (d: any) {
+          //@ts-ignore
           var h = this.getBBox().height;
           return d.y + h / 4;
         });
@@ -288,54 +322,21 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       iconSvgLabel.attr('transform', (d: any, index, selection) => {
         // @ts-ignore
         const w = selection[index].getBBox().width
+        //@ts-ignore
         const h = selection[index].getBBox().height
         const x = d.x - w / 2 - 2
         const y = d.y - h / 2 - 2
         return `translate(${x},${y})`
       })
     });
-  }
-  var width = 960,
-    height = 500;
-
-  var cola = webCola.d3adaptor(d3)
-    .size([width, height]);
-  cola
-    .nodes(graph.nodes)
-    .links(graph.links)
-    .groups(graph.groups)
-    .jaccardLinkLengths(120, 0.7)
-    .avoidOverlaps(true)
-    .start(50, 0, 50);
-  useEffect(() => {
-
-    const redraw = () => {
-      //@ts-ignore
-      const transform = d3.event.transform
-      svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-    }
-
-    var outer = d3.select(nodeRef).select("svg")
-      .attr('class', 'cola-graph')
-      .attr("pointer-events", "all")
-      .call(d3.zoom().on("zoom", redraw))
-      .on("dblclick.zoom", null)
-    outer.append('rect')
-      .attr('class', 'cola-graph-background')
-      .attr('width', "100%")
-      .attr('height', "100%")
-
-    let svg = outer
-      .append('g');
-
-    // @ts-ignore
-    update(svg, cola)
   }, [graph])
   return (
     <div style={{ height: '100%' }} ref={ref => nodeRef = ref}>
       <svg>
-        <g />
         <rect />
+        <g >
+          <defs />
+        </g>
       </svg>
     </div>
   )
