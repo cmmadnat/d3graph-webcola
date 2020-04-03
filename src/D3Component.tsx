@@ -295,38 +295,47 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       })
     });
   }
+  const [firstRun, setFirstRun] = React.useState(true)
+  var width = 960,
+    height = 500;
+
+  var cola = webCola.d3adaptor(d3)
+    .size([width, height]);
+  cola
+    .nodes(graph.nodes)
+    .links(graph.links)
+    .groups(graph.groups)
+    .jaccardLinkLengths(120, 0.7)
+    .avoidOverlaps(true)
+    .start(50, 0, 50);
   useEffect(() => {
-    var width = 960,
-      height = 500;
+    let svg
+    if (firstRun) {
+      setFirstRun(false)
 
-    var cola = webCola.d3adaptor(d3)
-      .size([width, height]);
-    var outer = d3.select(nodeRef).select("svg")
-      .attr('class', 'cola-graph')
-      .attr("pointer-events", "all")
-      .call(d3.zoom().on("zoom", redraw))
-      .on("dblclick.zoom", null)
-    outer.append('rect')
-      .attr('class', 'cola-graph-background')
-      .attr('width', "100%")
-      .attr('height', "100%")
+      var outer = d3.select(nodeRef).select("svg")
+        .attr('class', 'cola-graph')
+        .attr("pointer-events", "all")
+        .call(d3.zoom().on("zoom", (s: Selection<SVGGElement, any, null, undefined>) => redraw(s)))
+        .on("dblclick.zoom", null)
+      outer.append('rect')
+        .attr('class', 'cola-graph-background')
+        .attr('width', "100%")
+        .attr('height', "100%")
 
-    function redraw() {
-      //@ts-ignore
-      const transform = d3.event.transform
-      svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+      svg = outer
+        .append('g');
+      const redraw = (s: Selection<SVGGElement, any, null, undefined>) => {
+        //@ts-ignore
+        const transform = d3.event.transform
+        s.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+      }
+
     }
-
-    var svg = outer
-      .append('g');
-    cola
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .groups(graph.groups)
-      .jaccardLinkLengths(120, 0.7)
-      .avoidOverlaps(true)
-      .start(50, 0, 50);
-
+    else {
+      svg = d3.select(nodeRef).select('svg g')
+    }
+    // @ts-ignore
     update(svg, cola)
   }, [graph])
   return (
