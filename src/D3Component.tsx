@@ -295,7 +295,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       })
     });
   }
-  const [firstRun, setFirstRun] = React.useState(true)
   var width = 960,
     height = 500;
 
@@ -310,37 +309,34 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     .start(50, 0, 50);
   useEffect(() => {
     let svg
-    if (firstRun) {
-      setFirstRun(false)
 
-      var outer = d3.select(nodeRef).select("svg")
-        .attr('class', 'cola-graph')
-        .attr("pointer-events", "all")
-        .call(d3.zoom().on("zoom", (s: Selection<SVGGElement, any, null, undefined>) => redraw(s)))
-        .on("dblclick.zoom", null)
-      outer.append('rect')
-        .attr('class', 'cola-graph-background')
-        .attr('width', "100%")
-        .attr('height', "100%")
+    var outer = d3.select(nodeRef).select("svg")
+      .attr('class', 'cola-graph')
+      .attr("pointer-events", "all")
+      .call(d3.zoom().on("zoom", (s: Selection<SVGGElement, any, null, undefined>) => redraw(s)))
+      .on("dblclick.zoom", null)
+    outer.append('rect')
+      .attr('class', 'cola-graph-background')
+      .attr('width', "100%")
+      .attr('height', "100%")
 
-      svg = outer
-        .append('g');
-      const redraw = (s: Selection<SVGGElement, any, null, undefined>) => {
-        //@ts-ignore
-        const transform = d3.event.transform
-        s.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-      }
-
+    svg = outer
+      .append('g');
+    const redraw = (s: Selection<SVGGElement, any, null, undefined>) => {
+      //@ts-ignore
+      const transform = d3.event.transform
+      s.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
     }
-    else {
-      svg = d3.select(nodeRef).select('svg g')
-    }
+
     // @ts-ignore
     update(svg, cola)
   }, [graph])
   return (
     <div style={{ height: '100%' }} ref={ref => nodeRef = ref}>
-      <svg />
+      <svg>
+        <g />
+        <rect />
+      </svg>
     </div>
   )
 }
