@@ -37,12 +37,12 @@ const Demo = () => {
       <Example highlights={['1328']} graph={data} icons={icons} nodeRightClick={(node) => {
         const data3 = {
           result: {
-            nodes: rawData.result.nodes.filter(it => it.id !== '529').map(it => ({
+            nodes: rawData.result.nodes.filter(it => it.id !== '81').map(it => ({
               ...it, properties:
                 // @ts-ignore
                 { name: it.properties.full_name ? it.properties.full_name : it.properties.event_title }
             })),
-            relationships: rawData.result.relationships.filter(it => it.source !== '529')
+            relationships: rawData.result.relationships.filter(it => it.source !== '81')
           }
         }
         const data2 = convert(data3, icons)

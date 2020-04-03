@@ -264,6 +264,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       let group = svg.selectAll('.group').data(graph.groups)
       let groupLabel = svg.selectAll('.group-label').data(graph.groups)
 
+
       link.attr("x1", function (d: any) { return d.source.x; })
         .attr("y1", function (d: any) { return d.source.y; })
         .attr("x2", function (d: any) { return d.target.x; })
