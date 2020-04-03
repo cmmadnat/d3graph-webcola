@@ -308,25 +308,25 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     .avoidOverlaps(true)
     .start(50, 0, 50);
   useEffect(() => {
-    let svg
+
+    const redraw = () => {
+      //@ts-ignore
+      const transform = d3.event.transform
+      svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+    }
 
     var outer = d3.select(nodeRef).select("svg")
       .attr('class', 'cola-graph')
       .attr("pointer-events", "all")
-      .call(d3.zoom().on("zoom", (s: Selection<SVGGElement, any, null, undefined>) => redraw(s)))
+      .call(d3.zoom().on("zoom", redraw))
       .on("dblclick.zoom", null)
     outer.append('rect')
       .attr('class', 'cola-graph-background')
       .attr('width', "100%")
       .attr('height', "100%")
 
-    svg = outer
+    let svg = outer
       .append('g');
-    const redraw = (s: Selection<SVGGElement, any, null, undefined>) => {
-      //@ts-ignore
-      const transform = d3.event.transform
-      s.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-    }
 
     // @ts-ignore
     update(svg, cola)
