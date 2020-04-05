@@ -118,11 +118,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
 
 
 
-    const dragFunction = cola.drag()
-    //@ts-ignore
-    dragFunction.on('start', (d: any) => {
-      d.fixed = true
-    })
 
     let node = svg.selectAll(".node").data(graph.nodes)
     let label = svg.selectAll('.graph-cola-label').data(graph.nodes)
@@ -140,7 +135,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .attr('ry', 5)
       //@ts-ignor
       .style("fill", function (d, index) { return groupColor(index); })
-      .call(dragFunction);
 
     groupLabel
       .enter().append('text')
@@ -151,7 +145,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .enter().append("line")
       .attr("class", "link")
       .style('stroke', d => d.color)
-      .style("stroke-width", function (d) { return Math.sqrt(4); })
+      .style("stroke-width", function () { return Math.sqrt(4); })
       .attr('marker-end', d => typeof d.arrowHead === 'undefined' || d.arrowHead ? 'url(#arrowhead' + d.id + ')' : '')
       .on('dblclick', (l) => {
         if (relationshipDoubleClick) {
@@ -171,7 +165,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     linkLabelG
       .append('rect')
       .style('fill', 'white')
-      .attr('x', (d: any, _index, group) => {
+      .attr('x', (d: any, _index) => {
         return d.value.length * -5 / 2
       })
       .attr('y', -10)
@@ -195,7 +189,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .attr("r", 20)
       // @ts-ignore
       .style("fill", function (d: ModdedNode) { return d.color })
-      .call(dragFunction)
+
     node.append("title")
       .text(function (d: any) { return d.name; })
 
@@ -242,6 +236,11 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       })
       .attr('class', 'graph-cola-label-text')
 
+    const dragFunction = cola.drag()
+    //@ts-ignore
+    dragFunction.on('start', (d: any) => {
+      d.fixed = true
+    })
     applyNodeInteraction(nodeG, dragFunction, nodeRightClick, nodeDoubleClick)
     applyNodeInteraction(labelG, dragFunction, nodeRightClick, nodeDoubleClick)
     applyNodeInteraction(iconLabelG, dragFunction, nodeRightClick, nodeDoubleClick)
@@ -253,16 +252,12 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     iconSvgLabel.exit().remove()
     group.exit().remove()
     groupLabel.exit().remove()
+    link.exit().remove()
+    linkLabel.exit().remove()
+
+
 
     cola.on('tick', function () {
-      let node = svg.selectAll(".node").data(graph.nodes)
-      let label = svg.selectAll('.graph-cola-label').data(graph.nodes)
-      let iconSvgLabel = svg.selectAll('.icon-svg-label').data(graph.nodes.filter(d => typeof d.svg !== 'undefined'))
-      let iconLabel = svg.selectAll('.icon-label').data(graph.nodes.filter(d => typeof d.svg === 'undefined'))
-      let link = svg.selectAll(".link").data(graph.links)
-      let linkLabel = svg.selectAll(".link-label").data(graph.links)
-      let group = svg.selectAll('.group').data(graph.groups)
-      let groupLabel = svg.selectAll('.group-label').data(graph.groups)
 
 
       link.attr("x1", function (d: any) { return d.source.x; })
@@ -270,7 +265,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         .attr("x2", function (d: any) { return d.target.x; })
         .attr("y2", function (d: any) { return d.target.y; });
 
-      linkLabel.attr('transform', (d: any, index, selections) => {
+      linkLabel.attr('transform', (d: any) => {
         const x = d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2)
         const y = d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2)
         return `translate(${x},${y})`
@@ -330,6 +325,8 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
         return `translate(${x},${y})`
       })
     });
+    // end tick
+
   }, [graph])
   return (
     <div style={{ height: '100%' }} ref={ref => nodeRef = ref}>
