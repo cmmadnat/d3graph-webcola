@@ -66,7 +66,6 @@ const applyNodeInteraction = (target: any, dragFunction: any, rightClickFunction
 const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick, relationshipDoubleClick }: D3ComponentProps) => {
 
   let nodeRef: HTMLDivElement | null = null
-
   useEffect(() => {
     var width = 960,
       height = 500;
@@ -115,8 +114,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
       .style('stroke', 'none')
       .style('fill', d => d.color)
-
-
 
 
     let node = svg.selectAll(".node").data(graph.nodes)
@@ -255,10 +252,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     link.exit().remove()
     linkLabel.exit().remove()
 
-
-
     cola.on('tick', function () {
-
 
       link.attr("x1", function (d: any) { return d.source.x; })
         .attr("y1", function (d: any) { return d.source.y; })
