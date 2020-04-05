@@ -125,6 +125,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     let group = svg.selectAll('.group').data(graph.groups)
     let groupLabel = svg.selectAll('.group-label').data(graph.groups)
 
+
     group
       .enter().append('rect')
       .classed('group', true)
@@ -253,6 +254,14 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     linkLabel.exit().remove()
 
     cola.on('tick', function () {
+      let node = svg.selectAll(".node")
+      let label = svg.selectAll('.graph-cola-label')
+      let iconSvgLabel = svg.selectAll('.icon-svg-label')
+      let iconLabel = svg.selectAll('.icon-label')
+      let link = svg.selectAll(".link")
+      let linkLabel = svg.selectAll(".link-label")
+      let group = svg.selectAll('.group')
+      let groupLabel = svg.selectAll('.group-label')
 
       link.attr("x1", function (d: any) { return d.source.x; })
         .attr("y1", function (d: any) { return d.source.y; })
