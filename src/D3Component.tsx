@@ -116,14 +116,14 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .style('fill', d => d.color)
 
 
-    let node = svg.selectAll(".node").data(graph.nodes)
-    let label = svg.selectAll('.graph-cola-label').data(graph.nodes)
-    let iconSvgLabel = svg.selectAll('.icon-svg-label').data(graph.nodes.filter(d => typeof d.svg !== 'undefined'))
-    let iconLabel = svg.selectAll('.icon-label').data(graph.nodes.filter(d => typeof d.svg === 'undefined'))
-    let link = svg.selectAll(".link").data(graph.links)
-    let linkLabel = svg.selectAll(".link-label").data(graph.links)
-    let group = svg.selectAll('.group').data(graph.groups)
-    let groupLabel = svg.selectAll('.group-label').data(graph.groups)
+    let node = svg.select('#nodes').selectAll(".node").data(graph.nodes)
+    let label = svg.select('#nodes').selectAll('.graph-cola-label').data(graph.nodes)
+    let iconSvgLabel = svg.select('#nodes').selectAll('.icon-svg-label').data(graph.nodes.filter(d => typeof d.svg !== 'undefined'))
+    let iconLabel = svg.select('#nodes').selectAll('.icon-label').data(graph.nodes.filter(d => typeof d.svg === 'undefined'))
+    let link = svg.select('#links').selectAll(".link").data(graph.links)
+    let linkLabel = svg.select('#links').selectAll(".link-label").data(graph.links)
+    let group = svg.select('#groups').selectAll('.group').data(graph.groups)
+    let groupLabel = svg.select('#groups').selectAll('.group-label').data(graph.groups)
 
 
 
@@ -260,14 +260,14 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     })
 
     cola.on('tick', function () {
-      let node = svg.selectAll(".node")
-      let label = svg.selectAll('.graph-cola-label')
-      let iconSvgLabel = svg.selectAll('.icon-svg-label')
-      let iconLabel = svg.selectAll('.icon-label')
-      let link = svg.selectAll(".link")
-      let linkLabel = svg.selectAll(".link-label")
-      let group = svg.selectAll('.group')
-      let groupLabel = svg.selectAll('.group-label')
+      let node = svg.select('#nodes').selectAll(".node")
+      let label = svg.select('#nodes').selectAll('.graph-cola-label')
+      let iconSvgLabel = svg.select('#nodes').selectAll('.icon-svg-label')
+      let iconLabel = svg.select('#nodes').selectAll('.icon-label')
+      let link = svg.select('#links').selectAll(".link")
+      let linkLabel = svg.select('#links').selectAll(".link-label")
+      let group = svg.select('#groups').selectAll('.group')
+      let groupLabel = svg.select('#groups').selectAll('.group-label')
 
       link.attr("x1", function (d: any) { return d.source.x; })
         .attr("y1", function (d: any) { return d.source.y; })
@@ -342,6 +342,9 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       <svg>
         <rect />
         <g >
+          <g id="groups"></g>
+          <g id="links"></g>
+          <g id="nodes"></g>
           <defs />
         </g>
       </svg>
