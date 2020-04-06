@@ -48,7 +48,18 @@ const Demo = () => {
         const data2 = convert(data3, icons)
         setData(data2)
       }} nodeDoubleClick={() => {
-        console.log('dblclick')
+        const data3 = {
+          result: {
+            nodes: rawData.result.nodes.map(it => ({
+              ...it, properties:
+                // @ts-ignore
+                { name: it.properties.full_name ? it.properties.full_name : it.properties.event_title }
+            })),
+            relationships: rawData.result.relationships
+          }
+        }
+        const data2 = convert(data3, icons)
+        setData(data2)
       }} relationshipDoubleClick={(l) => {
         console.log(l)
       }} />

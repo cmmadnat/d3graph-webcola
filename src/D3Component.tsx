@@ -126,6 +126,7 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     let groupLabel = svg.selectAll('.group-label').data(graph.groups)
 
 
+
     group
       .enter().append('rect')
       .classed('group', true)
@@ -133,7 +134,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       .attr('ry', 5)
       //@ts-ignor
       .style("fill", function (d, index) { return groupColor(index); })
-
     groupLabel
       .enter().append('text')
       .classed('group-label', true)
@@ -257,7 +257,6 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
       label.call(cola.drag)
       iconLabel.call(cola.drag)
       iconSvgLabel.call(cola.drag)
-
     })
 
     cola.on('tick', function () {
