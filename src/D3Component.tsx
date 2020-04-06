@@ -252,6 +252,13 @@ const D3Component = ({ graph, icons, highlights, nodeRightClick, nodeDoubleClick
     groupLabel.exit().remove()
     link.exit().remove()
     linkLabel.exit().remove()
+    cola.on('end', function () {
+      node.call(cola.drag)
+      label.call(cola.drag)
+      iconLabel.call(cola.drag)
+      iconSvgLabel.call(cola.drag)
+
+    })
 
     cola.on('tick', function () {
       let node = svg.selectAll(".node")
